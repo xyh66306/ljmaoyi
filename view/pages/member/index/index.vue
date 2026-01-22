@@ -46,15 +46,11 @@
 					<view class="item-name">{{ item.name }}</view>
 				</view>
 			</view>		
-			<view class="ss-money-menu-wrap flex ss-col-center" v-if="hasLogin">
+<!-- 			<view class="ss-money-menu-wrap flex ss-col-center" v-if="hasLogin">
 				<view class="item"  @click="goToPage('/pages/member/dou/index')">
 					<view class="item-txt">{{userInfo.dou || "0.00"}}</view>
 					<view class="item-name">酒豆</view>
-				</view>
-				<view class="item"  @click="goToPage('/pages/member/exp/index')">
-					<view class="item-txt">{{userInfo.exp || "0.00"}}</view>
-					<view class="item-name">元宝</view>
-				</view>				
+				</view>			
 				<view class="item" @click="goToPage('/pages/member/balance/index')">
 					<view class="item-txt">{{userInfo.balance || "0.00" }}</view>
 					<view class="item-name">酒宝</view>
@@ -65,7 +61,7 @@
 					</view>
 					<view class="item-name">我的钱包</view>
 				</view>					
-			</view>
+			</view> -->
 <!-- 			<view class="ss-money-menu-wrap flex ss-col-center" v-if="hasLogin">
 				<view class="item">
 					<view class="item-txt">{{userInfo.zjc || 0}}</view>
