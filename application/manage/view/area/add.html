@@ -1,0 +1,31 @@
+<div style="padding:20px;" class="layui-form" lay-filter="area_add">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><i class="required-color">*</i>所属地区：</label>
+        <div class="layui-input-block">
+            {Jshop:area name='parent_id' class="select-address" lay-verify="required" value="$parent_id" }
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><i class="required-color">*</i>地区名称：</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" autocomplete="off" placeholder="请输入地区名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><i class="required-color">*</i>地区邮编：</label>
+        <div class="layui-input-block">
+            <input type="text" name="postal_code" autocomplete="off" placeholder="请输入地区邮编" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序：</label>
+        <div class="layui-input-block">
+            <input type="number" name="sort" autocomplete="off" placeholder="排序数字越小越靠前" class="layui-input">
+        </div>
+    </div>
+</div>
+<script>
+    layui.use('form', function () {
+        layui.form.render();
+    });
+</script>

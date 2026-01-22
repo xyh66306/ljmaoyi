@@ -1,0 +1,216 @@
+<style>
+    @media screen and (max-width: 500px) {
+        .layui-layer.layui-layer-page {
+            width: 100% !important;
+            overflow-x: scroll !important;
+            left: 0 !important;
+        }
+
+        .layui-layer-title {
+            width: 100% !important;
+            box-sizing: border-box;
+        }
+
+        .layui-layer-content {
+            width: 100% !important;
+        }
+    }
+
+    /* .layui-table-body{overflow-x: hidden;} */
+</style>
+<form class="layui-form seller-form" action="">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <div class="layui-input-inline seller-inline-3">
+                <input type="text" name="contribute" placeholder="贡献人手机号码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline seller-inline-3">
+                <input type="text" name="receipt" placeholder="收益人手机号码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline seller-inline-3">
+                <input type="text" name="order_id" placeholder="订单号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">分佣类型：</label>
+            <div class="layui-input-inline seller-inline-2">
+                <select name="type" lay-verify="">
+                    <option value=""></option>
+                    <option value="1">二次购物</option>
+                    <option value="2">绑定推荐人</option>
+                    <option value="3">会员升级</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">分佣时间：</label>
+            <div class="layui-input-inline seller-inline-4">
+                <input type="text" name="datetime" id="datetime" placeholder="开始时间 到 结束时间" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <!--<div class="layui-input-block">-->
+            <button class="layui-btn layui-btn-sm" lay-submit lay-filter="commission-search"><i
+                    class="iconfont icon-chaxun"></i>筛选</button>
+        </div>
+    </div>
+</form>
+
+<div class="table-body">
+    <table id="commissionTable" lay-filter="commissionTable"></table>
+</div>
+
+<script src="__STATIC_JS__jquery.form.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var table, window_box;
+    layui.use(['form', 'layedit', 'laydate', 'table'], function () {
+
+        var laydate = layui.laydate;
+        //时间插件
+        laydate.render({
+            elem: '#datetime',
+            range: '到',
+            format: 'yyyy-MM-dd',
+            trigger: 'click' //自动弹出控件的事件，采用click弹出
+        });
+
+        table = layui.table.render({
+            elem: '#commissionTable',
+            height: 'full-139',
+            cellMinWidth: '80',
+            page: 'true',
+            limit: '20',
+            totalRow: true, //开启合计行
+            url: "{:url('commission/index')}?_ajax=1",
+            id: 'commissionTable',
+            cols: [
+                [{
+                    field: 'id',
+                    title: 'ID',
+                    width: 90,
+                    align: 'center',
+                },
+                    {
+                        field: 'receipt_name',
+                        title: '推荐人',
+                        width: 120,
+                        align: 'center',
+                        totalRowText: '合计：'
+                    },
+                    {
+                        field: 'receipt_grade_name',
+                        title: '推荐等级',
+                        width: 120,
+                        align: 'center'
+                    },
+                    {
+                        field: 'money',
+                        title: '奖励',
+                        width: 100,
+                        align: 'center',
+                        edit: 'text',
+                        totalRow: true
+
+                    },
+                    {
+                        field: 'rate',
+                        title: '比例',
+                        width: 100,
+                        align: 'center',
+                        edit: 'text',
+                        totalRow: true
+
+                    },
+                    {
+                        field: 'contribute_name',
+                        title: '买方',
+                        width: 120,
+                        align: 'center'
+                    },
+                    {
+                        field: 'contribute_grade_name',
+                        title: '买方等级',
+                        width: 120,
+                        align: 'center'
+                    },
+                    {
+                        field: 'order_id',
+                        title: '订单ID',
+                        align: 'center'
+                    },
+                    {
+                        field: 'amount',
+                        title: '商品总额',
+                        totalRow: true,
+                        width: 120,
+                        align: 'center'
+                    },
+                    {
+                        field: 'ctime',
+                        title: '购物时间',
+                        width: 200,
+                        align: 'center'
+                    },
+                    {
+                        field: 'expire',
+                        title: '是否转入金额',
+                        align: 'center',
+                        templet: function (data) {
+                            var html = '';
+                            if (data.expire == '1') {
+                                html += '已转入';
+                            } else {
+                                html += '未转入';
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        field: 'is_del',
+                        title: '是否删除',
+                        align: 'center',
+                        templet: function (data) {
+                            var html = '';
+                            if (data.is_del == '1') {
+                                html = '<span style="color: red">是</span>';
+                            } else {
+                                html = '否';
+                            }
+                            return html;
+                        }
+                    }
+                ]
+            ]
+        });
+        layui.table.on('edit(commissionTable)', function (obj) {
+            JsPost("{:url('commission/updateAward')}", {
+                'field': obj.field,
+                'value': obj.value,
+                'id': obj.data.id
+            }, function (res) {
+                layer.msg(res.msg, {
+                    time: 1500
+                }, function () {
+                    if (res.status) {
+                        table.reload();
+                    }
+                });
+            });
+        });
+        //搜索
+        layui.form.on('submit(commission-search)', function (data) {
+            layui.table.reload('commissionTable', {
+                where: data.field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>

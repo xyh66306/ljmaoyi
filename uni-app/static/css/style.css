@@ -1,0 +1,940 @@
+body {
+	background-color: #f8f8f8;
+	font-size: 28rpx;
+}
+
+view {
+	box-sizing: border-box;
+}
+
+/* #ifdef MP-ALIPAY */
+image {
+	background-size: 100% 100%;
+}
+
+button {
+	height: auto;
+	border: none;
+	line-height: 2.55555556;
+	padding: 0 28rpx;
+}
+
+input {
+	background: none;
+	padding: 0;
+}
+
+shared-checkbox {
+	border-radius: 50%;
+}
+
+shared-checkbox {
+	border-radius: 50%;
+	height: 36rpx;
+	width: 36rpx;
+	margin-top: -4rpx;
+	border: 1rpx solid #d1d1d1;
+	color: #FF7159;
+}
+
+shared-checkbox:checked {
+	background-color: #000;
+	color: #000;
+}
+
+._radio {
+	border-radius: 50%;
+	/* 圆角 */
+	width: 36rpx;
+	height: 36rpx;
+	margin-top: -4rpx;
+	border: 1rpx solid #d1d1d1;
+}
+
+/* 选中后的 背景样式 （红色背景 无边框 可根据UI需求自己修改） */
+._radio:checked {
+	border: 1rpx solid #FF7159;
+	background: #FF7159;
+}
+
+/* 选中后的 对勾样式 （白色对勾 可根据UI需求自己修改） */
+._radio:checked::before {
+	border-radius: 50%;
+	/* 圆角 */
+	width: 36rpx;
+	/* 选中后对勾大小，不要超过背景的尺寸 */
+	height: 36rpx;
+	/* 选中后对勾大小，不要超过背景的尺寸 */
+	line-height: 36rpx;
+	text-align: center;
+	font-size: 28rpx;
+	/* 对勾大小 30rpx */
+	color: #fff;
+	/* 对勾颜色 白色 */
+	background: transparent;
+	transform: translate(-50%, -50%) scale(1);
+	-webkit-transform: translate(-50%, -50%) scale(1);
+}
+
+/* #endif */
+uni-toast .uni-toast {
+	font-size: 24rpx;
+	border-radius: 10px;
+	background: rgba(17, 17, 17, .5);
+}
+
+.content-top {
+	margin-bottom: 116rpx;
+}
+
+.have-none {
+	background-color: #f3f3f3;
+}
+
+.color-o {
+	color: #FF7159 !important;
+}
+
+.color-f {
+	color: #fff !important;
+}
+
+.color-d {
+	color: #ddd !important;
+}
+
+.color-3 {
+	color: #333 !important;
+}
+
+.color-6 {
+	color: #666 !important;
+}
+
+.color-9 {
+	color: #999 !important;
+}
+
+.fsz24 {
+	font-size: 24rpx !important;
+}
+
+.fsz26 {
+	font-size: 26rpx !important;
+}
+
+.fsz28 {
+	font-size: 28rpx !important;
+}
+
+.fsz30 {
+	font-size: 30rpx !important;
+}
+
+.fsz32 {
+	font-size: 32rpx !important;
+}
+
+.fsz34 {
+	font-size: 34rpx !important;
+}
+
+.fsz36 {
+	font-size: 36rpx !important;
+}
+
+.fsz38 {
+	font-size: 38rpx !important;
+}
+
+.fsz50 {
+	font-size: 50rpx !important;
+}
+
+.search {
+	width: 100%;
+	height: 104rpx;
+	padding: 16rpx 26rpx;
+	background-color: rgba(255, 255, 255, 1);
+	z-index: 999;
+	transition: all .5s;
+}
+
+.search-c {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	display: flex;
+	align-items: center;
+	border-radius: 50rpx;
+	background-color: #E9E9E9;
+	padding: 0 20rpx;
+}
+
+.search-input {
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	line-height: 52rpx;
+	padding: 10rpx;
+	font-size: 24rpx;
+	transition: all .5s;
+}
+
+.search-input-p {
+	color: #999;
+	width: 100%;
+	height: 100%;
+}
+
+.search-input-p-c {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.search-icon {
+	z-index: 99;
+}
+
+.swiper-c {
+	height: 100%;
+}
+
+.swiper-c image {
+	height: 100%;
+	width: 100%;
+}
+
+.btn {
+	display: inline-block;
+	box-sizing: border-box;
+	border-radius: 0;
+	font-size: 28rpx;
+	transform: scale(1);
+	transition: all .5s;
+}
+
+/*按钮按下缩小变色*/
+.btn-hover {
+	transform: scale(.90);
+	transition: all .5s;
+	opacity: .8;
+}
+
+/*按钮按下只变色*/
+.btn-hover2 {
+	/* 	transform: scale(.95); */
+	transition: all .1s;
+	opacity: .6;
+}
+
+.btn::after {
+	border: none;
+}
+
+.btn-circle {
+	padding: 0rpx 20rpx;
+	height: 60rpx;
+	line-height: 60rpx;
+	min-width: 140rpx;
+	font-size: 22rpx;
+}
+
+.btn-square {
+	padding: 0rpx 40rpx;
+	height: 90rpx;
+	line-height: 90rpx;
+	min-width: 150rpx;
+	border: none !important;
+}
+
+.btn-fillet {
+	border-radius: 50rpx;
+}
+
+.btn-c {
+	background-color: #f7f7f7;
+}
+
+.btn-w {
+	border: 2rpx solid #333;
+	color: #333;
+	background-color: #fff;
+}
+
+.btn-g {
+	border: 2rpx solid #E0E0E0;
+	color: #999;
+	background-color: #fff;
+}
+
+.btn-b {
+	border: 2rpx solid #05502C;
+	background-color: #05502C;
+	color: #fff;
+}
+
+.btn-o {
+	border: 2rpx solid #FF7159;
+	background-color: #FF7159;
+	color: #fff;
+}
+
+.btn-half {
+	width: 50%;
+}
+
+.btn-all {
+	width: 100%;
+}
+
+.img-grids {
+	overflow: hidden;
+}
+
+.img-grids-item {
+	width: 336rpx;
+	height: 476rpx;
+	margin: 26rpx;
+	display: inline-block;
+	background-color: #fff;
+	float: left;
+	min-height: 130rpx;
+	/* #ifdef MP-ALIPAY */
+	width: 330rpx;
+	margin: 25rpx;
+	min-height: 130rpx;
+	/* #endif */
+}
+
+.swiper-list .img-grids-item {
+	height: 350rpx !important;
+}
+
+.img-grids-item:nth-child(2n-1) {
+	margin-right: 0;
+}
+
+.img-grids-item-t {
+	width: 336rpx;
+	height: 336rpx;
+	/* #ifdef MP-ALIPAY */
+	width: 330rpx;
+	height: 330rpx;
+	/* #endif */
+}
+
+.img-grids-item-b {
+	padding: 0 10rpx 10rpx;
+}
+
+.goods-name {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	text-overflow: ellipsis;
+	word-wrap: break-word;
+	overflow: hidden;
+	color: #333;
+	width: 100%;
+	/* #ifdef MP-ALIPAY */
+	min-height: 20px;
+	/* #endif */
+}
+
+.grids-goods-name {
+	font-size: 26rpx;
+}
+
+.goods-item-c {
+	overflow: hidden;
+	margin-top: 10rpx;
+}
+
+.goods-price {
+	min-width: 120rpx;
+	min-height: 40rpx;
+	color: #333;
+	font-size: 28rpx;
+	display: inline-block;
+	float: left;
+}
+
+.red-price {
+	color: #FF7159 !important;
+}
+
+.img-list-item {
+	padding: 30rpx 26rpx;
+	background-color: #fff;
+	margin-bottom: 2rpx;
+	overflow: hidden;
+}
+
+.img-list-item-l {
+	width: 250rpx;
+	height: 250rpx;
+	display: inline-block;
+	float: left;
+}
+
+.img-list-item-r {
+	width: 410rpx;
+	min-height: 250rpx;
+	display: inline-block;
+	margin-left: 26rpx;
+	float: left;
+	padding: 10rpx 0;
+	position: relative;
+}
+
+.list-goods-name {
+	font-size: 28rpx;
+}
+
+.img-list-item .goods-item-c {
+	width: 100%;
+	margin-top: 0;
+}
+
+.img-list-item .goods-price {
+	min-width: 150rpx;
+	min-height: 50rpx;
+	font-size: 38rpx;
+	float: none;
+}
+
+.goods-buy {
+	overflow: hidden;
+}
+
+.goods-salesvolume {
+	min-width: 100rpx;
+	height: 30rpx;
+	font-size: 20rpx;
+	color: #999;
+	display: inline-block;
+}
+
+.goods-cart {
+	width: 40rpx;
+	height: 40rpx;
+	float: right;
+}
+
+.medium-img {
+	width: 196rpx;
+	height: 196rpx;
+}
+
+.little-img {
+	width: 140rpx;
+	height: 140rpx;
+}
+
+.small-img {
+	width: 120rpx;
+	height: 120rpx;
+}
+
+.medium-right {
+	width: 340rpx;
+	min-height: 140rpx;
+}
+
+.little-right {
+	width: 520rpx;
+	min-height: 140rpx;
+	padding: 0;
+}
+
+.small-right {
+	width: 540rpx;
+	height: 120rpx;
+	padding: 0;
+	min-height: 60rpx;
+}
+
+.little-right-t {
+	overflow: hidden;
+}
+
+.little-right .list-goods-name {
+	float: left;
+	width: 360rpx;
+	margin-bottom: 6rpx;
+}
+
+.small-right .list-goods-name {
+	width: 100%;
+}
+
+.little-right .goods-price {
+	float: right;
+	font-size: 28rpx;
+	text-align: right;
+	min-width: 120rpx;
+	max-width: 150rpx;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	min-height: 40rpx;
+}
+
+.goods-num {
+	float: right;
+	color: #999;
+	font-size: 24rpx;
+	height: 30rpx;
+	min-width: 50rpx;
+}
+
+.goods-numbox {
+	float: right;
+}
+
+.little-right .goods-salesvolume {
+	font-size: 24rpx;
+}
+
+.cell-group {
+	background-color: #fff;
+}
+
+.cell-item {
+	padding: 20rpx 26rpx 20rpx 0;
+	width: 724rpx;
+	margin-left: 26rpx;
+	border-bottom: 2rpx solid #f3f3f3;
+	position: relative;
+	background-color: #fff;
+	color: #333;
+	display: flex;
+	min-height: 90rpx;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.cell-item-mid {
+	justify-content: flex-start;
+}
+
+.cell-item:last-child {
+	border: none;
+}
+
+.cell-item-hd {
+	display: flex;
+	/* vertical-align: middle; */
+	align-items: center;
+	font-size: 28rpx;
+	position: relative;
+}
+
+.cell-item-bd-block {
+	display: block !important;
+}
+
+.cell-hd-icon {
+	width: 40rpx;
+	height: 40rpx;
+	display: inline-block;
+	/* float: left; */
+	margin-right: 8rpx;
+}
+
+.cell-hd-title {
+	/* float: left; */
+	display: inline-block;
+	position: relative;
+	/* #ifdef MP-ALIPAY */
+	top: 4rpx;
+	/* #endif */
+}
+
+.cell-item-bd {
+	display: flex;
+	margin-left: 20rpx;
+	min-height: 30rpx;
+	overflow: hidden;
+	align-items: center;
+	padding-right: 50rpx;
+}
+
+.cell-bd-view {
+	position: relative;
+	/* overflow: hidden; */
+	display: flex;
+}
+
+.cell-bd-text {
+	/* float: left; */
+	position: relative;
+	font-size: 24rpx;
+}
+
+.cell-bd-text-right {
+	float: right;
+}
+
+.cell-bd-input {
+	display: inline-block;
+	float: left;
+	font-size: 26rpx;
+}
+
+.cell-item-ft {
+	display: flex;
+	align-items: center;
+}
+
+.right-img .cell-item-ft {
+	right: 8rpx;
+	height: 50rpx;
+	position: absolute;
+}
+
+.cell-ft-view {
+	position: relative;
+	overflow: hidden;
+	color: #666;
+	font-size: 28rpx;
+	text-align: right;
+}
+
+.cell-ft-p {
+	font-size: 24rpx;
+	color: #666;
+}
+
+.cell-ft-text {
+	font-size: 28rpx;
+	float: right;
+	position: relative;
+	line-height: 50rpx;
+}
+
+.cell-ft-next {
+	float: right;
+}
+
+.margin-cell-group {
+	margin: 20rpx 0;
+}
+
+.bottom-cell-group {
+	margin-bottom: 20rpx;
+}
+
+.min-cell-group {
+	margin-bottom: 1px;
+	padding: 20rpx 0;
+}
+
+.min-cell-group .cell-item {
+	border-bottom: none;
+	min-height: 50rpx;
+	padding: 0 26rpx 0 0;
+}
+
+.icon {
+	width: 50rpx;
+	height: 50rpx;
+	/* #ifdef MP-ALIPAY */
+	background-size: 100% 100%;
+	/* #endif */
+}
+
+.swiper-grids .swiper-list {
+	white-space: nowrap;
+	width: 100%;
+	min-height: 200rpx;
+}
+
+.swiper-grids .img-grids-item {
+	float: none;
+	margin-right: 0;
+	width: 255rpx;
+	margin-top: 0;
+}
+
+.swiper-grids .img-grids-item:last-child {
+	margin-right: 26rpx;
+}
+
+.swiper-grids .img-grids-item-t {
+	width: 255rpx;
+	height: 255rpx;
+}
+
+.swiper-grids .goods-name {
+	white-space: normal;
+}
+
+.member-grid {
+	padding: 20rpx 26rpx;
+	width: 100%;
+	display: flex;
+}
+
+.member-item {
+	flex: 1;
+	text-align: center;
+	position: relative;
+}
+
+/*会员中心图标按下事件*/
+.member-item:active {
+	transform: scale(.90);
+	transition: all .5s;
+	opacity: .8;
+}
+
+.member-item-icon {
+	width: 50rpx;
+	height: 50rpx;
+	display: block;
+	margin: 0 auto;
+}
+
+.member-item-text {
+	font-size: 24rpx;
+	color: #666;
+	display: block;
+}
+
+.cart-checkbox {
+	position: relative;
+	height: 100%;
+}
+
+.cart-checkbox-c {
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	left: 26rpx;
+	transform: translateY(-50%);
+	z-index: 99;
+}
+
+.cart-list .img-list-item {
+	padding-left: 90rpx;
+}
+
+.cart-list .little-right {
+	width: 468rpx;
+}
+
+.cart-list .little-right .list-goods-name {
+	width: 300rpx;
+}
+
+.uni-checkbox-input {
+	border-radius: 50% !important;
+	color: #fff !important;
+}
+
+uni-radio .uni-radio-input,
+uni-checkbox .uni-checkbox-input {
+	width: 36rpx;
+	height: 36rpx;
+}
+
+uni-checkbox .uni-checkbox-input.uni-checkbox-input-checked,
+.uni-radio-input.uni-radio-input-checked {
+	background-color: #FF7159 !important;
+	border-color: #FF7159 !important;
+	width: 36rpx;
+	height: 36rpx;
+}
+
+uni-checkbox.checkboxNo .uni-checkbox-input {
+	background-color: #e1e1e1 !important;
+	border-color: #e1e1e1 !important;
+}
+
+uni-radio.radioNo .uni-radio-input {
+	background-color: #e1e1e1 !important;
+	border-color: #e1e1e1 !important;
+}
+
+uni-checkbox .uni-checkbox-input.uni-checkbox-input-checked:before {
+	font-size: 36rpx;
+}
+
+.login-item-i-p {
+	color: #999;
+}
+
+.two-line {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+}
+
+.badge {
+	display: inline-block;
+	position: absolute;
+	min-width: 13px;
+	height: 13px;
+	line-height: 13px;
+	background-color: #FF7159;
+	color: #fff;
+	font-size: 12px;
+	border-radius: 50rpx;
+	padding: 0 3px;
+	z-index: 99;
+}
+
+.button-bottom {
+	background-color: #fff;
+	position: fixed;
+	bottom: 0;
+	height: 90rpx;
+	width: 100%;
+	display: flex;
+	z-index: 66;
+	box-shadow: 0 0 10px #ccc;
+}
+
+.button-bottom .btn {
+	flex: 1;
+}
+
+.romotion-tip {
+	overflow: hidden;
+}
+
+.romotion-tip-item {
+	display: inline-block;
+	float: left;
+	margin-right: 10rpx;
+	margin-bottom: 4rpx;
+	background-color: #FF7159;
+	color: #fff;
+	height: 34rpx;
+	font-size: 24rpx;
+	line-height: 34rpx;
+	padding: 0 10rpx;
+}
+
+.bg-gray {
+	background-color: #D0D0D0;
+}
+
+/*  #ifdef MP */
+checkbox .wx-checkbox-input {
+	border-radius: 50%;
+	height: 36rpx;
+	width: 36rpx;
+	margin-top: -4rpx;
+	border: 1rpx solid #d1d1d1;
+
+}
+
+checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+	width: 36rpx;
+	height: 36rpx;
+	line-height: 36rpx;
+	border-radius: 50%;
+	text-align: center;
+	font-size: 28rpx;
+	color: #fff;
+	background: transparent;
+	transform: translate(-50%, -50%) scale(1);
+	-webkit-transform: translate(-50%, -50%) scale(1);
+	background-color: #FF7159;
+	border: 1rpx solid #FF7159;
+}
+
+radio .wx-radio-input {
+	border-radius: 50%;
+	/* 圆角 */
+	width: 36rpx;
+	height: 36rpx;
+	margin-top: -4rpx;
+	border: 1rpx solid #d1d1d1;
+}
+
+/* 选中后的 背景样式 （红色背景 无边框 可根据UI需求自己修改） */
+radio .wx-radio-input.wx-radio-input-checked {
+	border: 1rpx solid #FF7159;
+	background: #FF7159;
+}
+
+/* 选中后的 对勾样式 （白色对勾 可根据UI需求自己修改） */
+radio .wx-radio-input.wx-radio-input-checked::before {
+	border-radius: 50%;
+	/* 圆角 */
+	width: 36rpx;
+	/* 选中后对勾大小，不要超过背景的尺寸 */
+	height: 36rpx;
+	/* 选中后对勾大小，不要超过背景的尺寸 */
+	line-height: 36rpx;
+	text-align: center;
+	font-size: 28rpx;
+	/* 对勾大小 30rpx */
+	color: #fff;
+	/* 对勾颜色 白色 */
+	background: transparent;
+	transform: translate(-50%, -50%) scale(1);
+	-webkit-transform: translate(-50%, -50%) scale(1);
+}
+
+/*  #endif  */
+.goods-bottom {
+	z-index: 97;
+}
+
+.btn-small {
+	padding: 0 10rpx;
+	height: 36rpx;
+	line-height: 32rpx;
+	font-size: 24rpx;
+	margin: 0 10rpx;
+}
+
+.gift {
+	font-size: 24rpx;
+	color: #FF7159;
+}
+
+.clearfix:after {
+	/*伪元素是行内元素 正常浏览器清除浮动方法*/
+	content: "";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.clearfix {
+	/* *zoom: 1; */
+	/*ie6清除浮动的方式 *号只有IE6-IE7执行，其他浏览器不执行*/
+}
+
+.one-line {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.lable{
+		display: inline-block;
+		margin-right: 8rpx;
+		
+	}
+.tag{
+	 border-radius: 4rpx; /* 圆角的大小 */ 
+	font-size: 20rpx;
+	color: white;
+	padding: 2rpx;
+	font-weight: bold;
+	text-align:center;
+}
+
+
+.flex {
+	display:flex;	
+}
