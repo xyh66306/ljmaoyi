@@ -1,8 +1,8 @@
 {
-    "name" : "万森健康生活馆",
-    "appid" : "__UNI__952071A",
-    "description" : "万森健康生活馆",
-	"sassImplementationName": "node-sass",
+    "name" : "月亮姐姐&月光集",
+    "appid" : "__UNI__B7CA3F6",
+    "description" : "月亮姐姐&月光集",
+    "sassImplementationName" : "node-sass",
     "versionName" : "2.0",
     "versionCode" : 15,
     "transformPx" : false,
@@ -79,16 +79,13 @@
                 "desc" : "用于获取您附近的门店列表"
             }
         },
-		"lazyCodeLoading" : "requiredComponents",
-		"requiredPrivateInfos":[
-			"getLocation",
-			"chooseAddress"
-		],
-		"__usePrivacyCheck__":true
+        "lazyCodeLoading" : "requiredComponents",
+        "requiredPrivateInfos" : [ "getLocation", "chooseAddress" ],
+        "__usePrivacyCheck__" : true
     },
     "h5" : {
-        "title" : "万森健康生活馆",
-        "domain" : "https://jytx.wansenjiankang.cn/",
+        "title" : "月亮姐姐&月光集",
+        "domain" : "https://ljmaoyi.wobeis.com/",
         "router" : {
             "base" : "/wap/",
             "mode" : "history"

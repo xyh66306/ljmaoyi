@@ -1,4 +1,4 @@
-export const apiBaseUrl = 'https://jytx.wansenjiankang.cn/'
+export const apiBaseUrl = 'https://ljmaoyi.wobeis.com/'
 export const h5Url = apiBaseUrl + "wap/" //H5端网站地址,
 // export const h5Url = "http://localhost:8080/wap/" //H5端网站地址,
 
