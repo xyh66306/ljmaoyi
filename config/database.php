@@ -1,4 +1,7 @@
 <?php
+/*
+ * @company: 安徽爱喜网络科技有限公司
+ */
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
@@ -15,11 +18,11 @@ return [
     // 服务器地址
     'hostname'        => '127.0.0.1',
     // 数据库名
-    'database'        => 'jytx_wansenjiank',
+    'database'        => 'ljmaoyi',
     // 用户名
-    'username'        => 'jytx_wansenjiank',
+    'username'        => 'ljmaoyi',
     // 密码
-    'password'        => 'TscJWRs8JhGm4X4x',
+    'password'        => 'WEk5Lx7wYJ8DwLx7',
     // 端口
     'hostport'        => '3306',
     // 连接dsn
