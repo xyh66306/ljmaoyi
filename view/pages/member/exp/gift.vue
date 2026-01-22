@@ -1,0 +1,358 @@
+<template>
+	<view>
+		<view class="topArea">
+			<view class="wallteArea">
+				<view class="wallte_tit">钱包元宝（元）</view>
+				<view class="wallte_info">
+					<view class="money_nums">{{userInfo.exp}}</view>
+					<!-- <view class="txbtn">转增</view> -->
+				</view>
+				<view class="bg">
+					<image src="/static/img/wallet_card_bg.png" mode=""></image>
+				</view>
+			</view>
+		</view>
+		<view class="integral-bottom">
+			<view class='cell-group'>
+				<view class='cell-item user-head'>
+					<view class='cell-item-hd'>
+						<view class='cell-hd-title'>转赠手机号</view>
+					</view>
+					<view class='cell-item-bd'>
+						<input class='cell-bd-input' type="number" maxlength="11" placeholder='请填写手机号' v-model="mobile"></input>
+					</view>
+				</view>
+				<view class='cell-item user-head'>
+					<view class='cell-item-hd'>
+						<view class='cell-hd-title'>转赠元宝</view>
+					</view>
+					<view class='cell-item-bd'>
+						<input class='cell-bd-input' type="number" placeholder='请填写转赠元宝' v-model="exp"></input>
+					</view>
+				</view>
+			</view>	
+		</view>
+		
+		
+		<view class="payArea" v-if="showPay">
+			<view class="pay-title">
+				<text v-show="AffirmStatus === 1">请输入6位支付密码</text>
+				<text v-show="AffirmStatus === 2">请设置6位支付密码</text>
+				<text v-show="AffirmStatus === 3">请确认6位支付密码</text>
+			</view>
+			<view class="pay-password" @click="onPayUp">
+				<view class="list">
+					<text v-show="passwordArr.length >= 1">●</text>
+				</view>
+				<view class="list">
+					<text v-show="passwordArr.length >= 2">●</text>
+				</view>
+				<view class="list">
+					<text v-show="passwordArr.length >= 3">●</text>
+				</view>
+				<view class="list">
+					<text v-show="passwordArr.length >= 4">●</text>
+				</view>
+				<view class="list">
+					<text v-show="passwordArr.length >= 5">●</text>
+				</view>
+				<view class="list">
+					<text v-show="passwordArr.length >= 6">●</text>
+				</view>
+			</view>
+		</view>
+		<cc-defineKeyboard ref="CodeKeyboard" passwrdType="pay" @KeyInfo="KeyInfo"></cc-defineKeyboard>		
+		
+		<view class="button-bottom" v-if="showPay==false">
+			<button class="btn btn-square btn-b" hover-class="btn-hover2" @click="subForm()" :disabled='submitStatus'
+			 :loading='submitStatus'>提交</button>
+		</view>
+	</view>
+</template>
+
+
+<script>
+	export default{
+		data() {
+			return {
+				showPay:false,
+                AffirmStatus: 1,
+                passwordArr: [],
+                oldPasswordArr: [],
+                newPasswordArr: [],
+                afPasswordArr: [],				
+				userInfo:{},
+				mobile:'',
+				exp:'',
+				submitStatus: false
+			}
+		},
+		computed: {
+			// 验证手机号
+			rightMobile() {
+				let res = {};
+				if (!this.mobile) {
+					res.status = false;
+					res.msg = '请输入手机号';
+				} else if (!/^1[3456789]{1}\d{9}$/gi.test(this.mobile)) {
+					res.status = false;
+					res.msg = '手机号格式不正确';
+				} else {
+					res.status = true;
+				}
+				return res;
+			},
+		},
+		onShow() {
+			this.getUserInfo();
+		},
+		methods:{
+			getUserInfo() {
+				// 获取用户信息
+				var _this = this
+				if (this.$db.get('userToken')) {
+					this.$api.userInfo({}, res => {
+						if (res.status) {
+							_this.userInfo = res.data
+						}
+					})
+				}
+			    
+			},
+			subForm(){
+				if(!this.userInfo.paypwd){
+					this.$common.modelShow("温馨提示","请先设置支付密码",res=>{
+						this.$common.navigateTo("/pages/member/setting/user_info/resetpaypwd")
+					});
+					this.submitStatus = false;
+					return;
+				}
+				if (!this.rightMobile.status) {
+					this.$common.errorToShow(this.rightMobile.msg);
+					this.submitStatus = false;
+					return;
+				}
+				let exp = parseInt(this.exp);
+				let userexp = parseInt(this.userInfo.exp)
+				
+				let diff = exp % 10;
+				if(diff>0){
+					this.$common.errorToShow("转赠元宝必须是10的倍数");
+					this.submitStatus = false;
+					return;
+				}
+				
+				if(exp>userexp){
+					this.$common.errorToShow("元宝不足");
+					this.submitStatus = false;
+					return;
+				}
+				this.onPayUp();
+			},			
+			/** * 唤起键盘 */
+			onPayUp() {
+				this.showPay = true
+				this.$refs.CodeKeyboard.show();
+			},
+			closePayUp() {
+				this.passwordArr = [];
+				this.showPay = false
+				this.$refs.CodeKeyboard.hide();
+			},			
+			KeyInfo(val) {
+				let that = this;
+				
+				if (val.index >= 6) {
+					return;
+				}
+				// 判断是否输入的是删除键
+				if (val.keyCode === 8) {
+					// 删除最后一位
+					that.passwordArr.splice(val.index + 1, 1)
+				}
+				// 判断是否输入的是.
+				else if (val.keyCode == 190) {
+					// 输入.无效
+				} else {
+					that.passwordArr.push(val.key);
+				}
+				if (val.index == 5) {
+					let pwd_str = that.passwordArr.join('');
+					that.$api.authPaypwd({
+						paypwd:pwd_str
+					},res=>{
+						if(res.status){
+							that.submitExp();
+						}else{
+							that.$common.errorToShow(res.msg)
+						}
+					})
+					return;
+				}
+			},				
+			submitExp(){
+				this.submitStatus = true;
+				// if (!this.rightMobile.status) {
+				// 	this.$common.errorToShow(this.rightMobile.msg);
+				// 	this.submitStatus = false;
+				// 	return;
+				// }
+				// let diff = this.exp % 10;
+				// if(diff>0){
+				// 	this.$common.errorToShow("转赠元宝必须是10的倍数");
+				// 	this.submitStatus = false;
+				// 	return;
+				// }
+				// if(this.exp>this.userInfo.exp){
+				// 	this.$common.errorToShow("元宝不足");
+				// 	this.submitStatus = false;
+				// 	return;
+				// }
+				this.$api.givExp({
+					mobile:this.mobile,
+					exp:this.exp
+				},res=>{
+					this.closePayUp();
+					this.getUserInfo();
+					this.submitStatus = false;
+					this.$common.errorToShow(res.msg)
+				})
+			}
+		}		
+	}
+</script>
+
+
+<style lang="scss">
+	image {
+		width: 100%;
+		height: 100%;
+	}
+	
+
+.topArea {
+	padding:30rpx;
+	background:#fff;
+	.wallteArea {
+		background:#b9622e;
+		width:690rpx;
+		height:301rpx;
+		position: relative;
+		border-radius: 40rpx;
+		overflow: hidden;
+		padding:40rpx 60rpx;
+		color:#fff;
+		.wallte_tit {
+			width:100%;
+			font-size:34rpx;
+			overflow: hidden;
+		}
+		.wallte_info {
+			display:flex;
+			justify-content: space-between;
+			margin-top:40rpx;
+			.money_nums {
+				font-size:60rpx;
+				font-family: OPPOSANS;
+			}
+			.txbtn {
+				background:#fff;
+				border-radius: 66rpx;
+				overflow:hidden;
+				color:#ff6000;
+				font-size:28rpx;
+				width:120rpx;
+				height: 60rpx;
+				line-height:60rpx;
+				text-align:center;
+			}
+		}
+		.bg {
+			position: absolute;
+			left:0rpx;
+			top:0rpx;
+			width:710rpx;
+			height:301rpx;
+		}
+	}
+
+}
+
+
+.integral-bottom {
+	width: 702rpx;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.button-bottom {
+	.btn-b {
+		width: 100%;
+		background:#b9622e;
+	}
+}
+
+
+$base: orangered; 
+
+
+.payArea {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #FFFFFF;
+}
+.pay-title {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 200rpx;
+
+	text {
+		font-size: 28rpx;
+		color: #555555;
+	}
+}
+
+.pay-password {
+	display: flex;
+	align-items: center;
+	width: 90%;
+	height: 80rpx;
+	margin: 20rpx auto;
+	border: 2rpx solid $base;
+
+	.list {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 16.666%;
+		height: 100%;
+		border-right: 2rpx solid #EEEEEE;
+
+		text {
+			font-size: 32rpx;
+		}
+	}
+
+	.list:nth-child(6) {
+		border-right: none;
+	}
+}
+
+.hint {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100rpx;
+
+	text {
+		font-size: 28rpx;
+		color: $base;
+	}
+}
+</style>
