@@ -41,10 +41,10 @@
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">生日：</label>
+            <label class="layui-form-label">代理区域：</label>
 
             <div class="layui-input-inline">
-                <input type="text" name="birthday" id="birthday" class="layui-input" value="{$info.birthday}" autocomplete="off">
+                {Jshop:area name='area_id' class="select-address" lay-verify="required" value="$info.area_id" }
             </div>
         </div>
     </div>

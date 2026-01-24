@@ -156,7 +156,8 @@
                 },
                 { field: 'id', title: 'ID', width:90, align: 'center' },
                 { field: 'mobile', title: '手机号码', width: 150, align: 'center'},
-                { field: 'username', title: '用户名', width: 120, align: 'center'},
+                // { field: 'username', title: '用户名', width: 120, align: 'center'},
+                { field: 'nickname', title: '昵称', minWidth: 120, align: 'center' },
                 { field: 'grade_name', title: '等级', width: 150, align: 'center'},
                 { field: 'sex', title: '性别', align: 'center' },
                 {
@@ -169,31 +170,30 @@
                         }
                     }, width: 80, align: 'center'
                 },
-                {
-                    field: 'userWx', title: '第三方账号',
-                    templet: function (d) {
-                        var the_name = new Array(5)
-                        the_name[1] = "微信小程序"
-                        the_name[2] = "微信公众号"
-                        the_name[3] = "支付宝小程序"
-                        the_name[4] = "微信APP快捷登陆"
-                        the_name[5] = "QQ在APP中快捷登陆"
-                        the_name[6] = "头条系小程序"
-                        var html = "";
-                        for(wx in d.user_wx){
-                            html = html + "<img src='/static/images/userwx_"+d.user_wx[wx].type+".jpg' style='width:28px;' title='" +the_name[d.user_wx[wx].type]+"' />";
-                        }
-                        return html;
-                    }, width: 120, align: 'center'
-                },
-                { field: 'nickname', title: '昵称', minWidth: 120, align: 'center' },
+                // {
+                //     field: 'userWx', title: '第三方账号',
+                //     templet: function (d) {
+                //         var the_name = new Array(5)
+                //         the_name[1] = "微信小程序"
+                //         the_name[2] = "微信公众号"
+                //         the_name[3] = "支付宝小程序"
+                //         the_name[4] = "微信APP快捷登陆"
+                //         the_name[5] = "QQ在APP中快捷登陆"
+                //         the_name[6] = "头条系小程序"
+                //         var html = "";
+                //         for(wx in d.user_wx){
+                //             html = html + "<img src='/static/images/userwx_"+d.user_wx[wx].type+".jpg' style='width:28px;' title='" +the_name[d.user_wx[wx].type]+"' />";
+                //         }
+                //         return html;
+                //     }, width: 120, align: 'center'
+                // },
                 {
                     title: '余额', templet: function (data) {
                         var html = '<a class="link-hot option-show balance" data-id="' + data.id + '">' + data.balance + '</a>';
                         return html;
                     }, minWidth:100, align: 'center'
                 },
-                { field: 'birthday', title: '生日', width: 115, align: 'center' },
+                { field: 'area_name', title: '代理', width: 115, align: 'center' },
                 {
                     title: '积分', templet: function (data) {
                         var html = '<a class="link-hot option-show point" data-id="' + data.id + '">' + data.point + '</a>';

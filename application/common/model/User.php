@@ -197,6 +197,12 @@ class User extends Common
             $userInfo = $this->where(array('id' => $user_id))->find();
             hook('newuserreg', $userInfo);
             hook("adminmessage",array('user_id'=>$user_id,"code"=>"user_register","params"=>$userInfo));
+            #@Fdw 用户注册后添加邀请记录dwF
+            hook('addUserInviteLog', [
+                'user_id' => $userInfo['id'],
+                'parent_id' => $userInfo['pid'],
+            ]);
+
         } else {
             //如果有这个账号的话，判断一下是不是传密码了，如果传密码了，就是注册，这里就有问题，因为已经注册过
             if (isset($data['password'])) {
@@ -456,6 +462,11 @@ class User extends Common
             if (isset($v['avatar']) && $v['avatar']) {
                 $list[$k]['avatar'] = _sImage($v['avatar']);
             }
+            if(isset($v['area_id']) && $v['area_id']){
+                $list[$k]['area_name'] = get_area($v['area_id']);
+            }else {
+                $list[$k]['area_name'] = '--';
+            }
         }
         return $list;
     }
@@ -512,19 +523,6 @@ class User extends Common
      * 获取用户的信息
      * @return array|null|\PDOStatement|string|\think\Model
      */
-    //    public function getUserInfo($user_id)
-    //    {
-    //        $data = $this->where('id', $user_id)->find();
-    //        if ($data) {
-    //            $data['state']    = $data['status'];
-    //            $data['status']   = config('params.user')['status'][$data['status']];
-    //            $data['p_mobile'] = $this->getUserMobile($data['pid']);
-    //            return $data;
-    //        } else {
-    //            return "";
-    //        }
-    //    }
-
     public function getUserInfo($user_id)
     {
         $result = [
@@ -533,7 +531,7 @@ class User extends Common
             'msg' => ''
         ];
         $userInfo = $this::with("grade")
-            ->field('id,username,mobile,sex,birthday,avatar,nickname,balance,point,grade,status,pid,password,ctime,remarks')
+            ->field('id,username,mobile,sex,birthday,avatar,nickname,balance,point,grade,status,pid,password,ctime,remarks,area_id')
             ->where(array('id' => $user_id))
             ->find();
         if ($userInfo !== false) {
@@ -820,6 +818,13 @@ class User extends Common
         $return = [];
         $return['data'] = $this->save($data, $where);
         if ($return['data'] !== false) {
+
+            #@Fdw 用户注册后添加邀请记录dwF
+            hook('addUserInviteLog', [
+                'user_id' => $user_id,
+                'parent_id' => $superior_id,
+            ]);
+
             $return['status'] = true;
             $return['msg']    = '填写邀请码成功';
         } else {
@@ -976,6 +981,7 @@ class User extends Common
         $newData['nickname'] = $data['nickname'];
         $newData['balance']  = 0;
         $newData['point']    = 0;
+        $newData['area_id']  = isset($data['area_id']) ? $data['area_id'] : 0;
         $newData['ctime']    = $time;
         $newData['utime']    = $time;
         $newData['status']   = isset($data['status']) ? $data['status'] : self::STATUS_NORMAL;
@@ -987,6 +993,12 @@ class User extends Common
         if ($result) {
             $newData['id'] = $this->id;
             hook('addUserAfter', $newData); //添加用户后钩子
+            #@Fdw 用户注册后添加邀请记录dwF
+            hook('addUserInviteLog', [
+                'user_id' => $this->id,
+                'parent_id' => $newData['pid'],
+            ]);
+
             if (session('manage.id')) {
                 $userLogModel = new UserLog();
                 $userLogModel->setLog(session('manage.id'), $userLogModel::USER_REG);
@@ -1054,10 +1066,18 @@ class User extends Common
         $newData['status']   = $data['status'];
         $newData['pid']      = $data['pid'];
         $newData['grade']    = $data['grade'];
+        $newData['area_id']  = isset($data['area_id']) ? $data['area_id'] : 0;
         $result              = $this->save($newData, $where);
         $return['data']      = $result;
 
         if ($result) {
+
+            hook('addUserInviteLog', [
+                'user_id' => $data['id'],
+                'parent_id' => $newData['pid'],
+            ]);
+
+
             $return['status'] = true;
             $return['msg']    = '修改成功';
         }
