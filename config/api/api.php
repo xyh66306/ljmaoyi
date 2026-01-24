@@ -847,5 +847,18 @@ return [
                 'is_login' => false
             ],
         ]
-    ]
+    ],
+    'shopindex'        => [
+        'code'   => 'ShopIndex',
+        'method' => [
+            'goodslist' => [
+                'code'     => 'goodslist',
+                'is_login' => false
+            ],
+            'screen' => [
+                'code'     => 'screen',
+                'is_login' => false
+            ]            
+        ],
+    ],         
 ];

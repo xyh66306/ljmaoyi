@@ -1,9 +1,9 @@
 {
-    "name" : "中健昊天宠粉1.0系统",
+    "name" : "月亮姐姐-灵境集",
     "appid" : "__UNI__23C5158",
-    "description" : "中健昊天宠粉1.0系统",
-    "versionName" : "1.1.2",
-    "versionCode" : 112,
+    "description" : "月亮姐姐-灵境集",
+    "versionName" : "1.1.0",
+    "versionCode" : 110,
     "transformPx" : false,
     "uniStatistics" : {
         "enable" : false //全局关闭统计 
@@ -118,8 +118,8 @@
         "__usePrivacyCheck__" : true
     },
     "h5" : {
-        "title" : "中健昊天",
-        "domain" : "https://zjht.wobeis.com/",
+        "title" : "月亮姐姐-灵境集",
+        "domain" : "https://ljmaoyi.wobeis.com/",
         "router" : {
             "base" : "/wap/",
             "mode" : "history"
