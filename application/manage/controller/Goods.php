@@ -349,6 +349,9 @@ class Goods extends Manage
         $data['goods']['marketable']   = input('post.goods.marketable', '2');
         $data['goods']['is_recommend'] = input('post.goods.is_recommend', '2');
         $data['goods']['is_hot']       = input('post.goods.is_hot', '2');
+
+        $data['goods']['thumb']         = input('post.goods.thumb', '');
+
         $open_spec                     = input('post.open_spec', 0);
         $specdesc                      = input('post.spec/a', []);
         $new_spec                      = input('post.goods.new_spec/a', []);//自定义规格
