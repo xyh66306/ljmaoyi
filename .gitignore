@@ -1,4 +1,5 @@
 # 忽略目录下的所有文件
+/public/*
 /view/unpackage/*
 /view/unpackage/cache/*
 /view/unpackage/debug/*
