@@ -848,17 +848,13 @@ return [
             ],
         ]
     ],
-    'shopindex'        => [
-        'code'   => 'ShopIndex',
+    'shopindex' => [
+        'code' => 'ShopIndex',
         'method' => [
-            'goodslist' => [
-                'code'     => 'goodslist',
+            'index'       => [
+                'code'     => 'index',
                 'is_login' => false
             ],
-            'screen' => [
-                'code'     => 'screen',
-                'is_login' => false
-            ]            
-        ],
-    ],         
+        ]
+    ],        
 ];
