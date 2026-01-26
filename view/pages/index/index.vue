@@ -40,7 +40,7 @@
 					</view>
 				</view> -->
 				<view class="hot_img">
-					<image src="/static/img/hot.png" mode=""></image>
+					<image src="/static/img/taocan.png" mode=""></image>
 				</view>
 				<!--  -->
 				<view class="proLst">

@@ -5,6 +5,7 @@ use app\common\model\BillRefund;
 use app\common\model\Order;
 use app\common\model\User;
 use app\common\model\UserGrade;
+use app\common\model\UserFenyong;
 use myxland\addons\Addons;
 use app\common\model\Addons as addonsModel;
 use think\Db;
@@ -65,22 +66,24 @@ class Userupgrade extends Addons
         if(!$userInfo){
             return true;
         }
-        $payed_money = $this->orderpayedmoney($info['user_id']);
-        $refund_money = $this->orderrefundmoney($info['user_id']);
-        $money = $payed_money - $refund_money;
+        $userFenyongModel = new UserFenyong();
+        $userFenyongModel->fanyong($order_id,$user_id);
+        // $payed_money = $this->orderpayedmoney($info['user_id']);
+        // $refund_money = $this->orderrefundmoney($info['user_id']);
+        // $money = $payed_money - $refund_money;
 
-        //取所有用户等级信息
-        $userGradeModel = new UserGrade();
-        $list = $userGradeModel->order('id asc')->select();
-        $id = 0;
-        foreach($list as $v){
-            if($v['money'] > 0 && $v['money']<= $money){
-                $id = $v['id'];
-            }
-        }
-        if($userInfo['grade']< $id){
-            $userModel->save(['grade'=>$id],['id'=>$userInfo['id']]);
-        }
+        // //取所有用户等级信息
+        // $userGradeModel = new UserGrade();
+        // $list = $userGradeModel->order('id asc')->select();
+        // $id = 0;
+        // foreach($list as $v){
+        //     if($v['money'] > 0 && $v['money']<= $money){
+        //         $id = $v['id'];
+        //     }
+        // }
+        // if($userInfo['grade']< $id){
+        //     $userModel->save(['grade'=>$id],['id'=>$userInfo['id']]);
+        // }
         return true;
     }
     //订单支付的金额

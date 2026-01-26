@@ -102,7 +102,47 @@ class UserFenyong extends Common
     }
 
 
+    public function fanyong($order_id,$user_id){
 
+        #订单详细
+        $order_items = Db::name('order_items')->alias('a')
+            ->join('order c', 'c.order_id = a.order_id', 'LEFT')
+            ->join('goods g', 'g.id = a.goods_id', 'LEFT')
+            ->where(['a.order_id'=>$order_id, 'c.pay_status'=>2, 'c.user_id'=>$user_id])
+            ->where('a.is_fenyong', 0)
+            ->field('a.*, c.user_id, c.ctime as create_time,c.pay_status,c.payed,g.goods_cat_id,a.promotion_amount')
+            ->select()
+            ->toArray();
+
+
+        if(empty($order_items)) {
+            return true;
+        }
+        #用户邀请信息
+        $userInfo = Db::name('user')->where(['id'=>$user_id])->find();
+        if(empty($userInfo)){
+            return true;
+        }
+
+
+        if($userInfo['pid'] == 0){
+            return true;
+        }
+
+
+        foreach($order_items as $key => $v) {
+
+            if($v['goods_cat_id'] == 1){
+                //套餐产品
+
+                
+            } else{
+                //产品复购
+            }
+
+        }   
+
+    }
     
 
 

@@ -280,14 +280,12 @@
 				<view v-if="isfav">已收藏</view>
 			</view>
 			
-			<block v-if="goodsInfo.is_recommend==1  && auth==1">
+			<block v-if="goodsInfo.goods_cat_id==1">
 				<button class='btn btn-square btn-b' @click="toshow(3)" hover-class="btn-hover2" style="width: 58%;">立即购买</button>
 			</block>
-			<block v-if="goodsInfo.is_hot==1">
-				<button class='btn btn-square btn-b' @click="toshow(2)" hover-class="btn-hover2" style="width: 58%;">立即购买</button>				
-			</block>
-			<block v-if="goodsInfo.is_recommend==1  && auth==2">
-				<button class='btn btn-square btn-b' hover-class="btn-hover2" style="width: 58%;">暂无权限</button>
+			<block v-else>
+				<button class='btn btn-square btn-g' @click="toshow(1)" hover-class="btn-hover2" style="width: 30%;">加入购物车</button>
+				<button class='btn btn-square btn-b' @click="toshow(2)" hover-class="btn-hover2" style="width: 28%;">立即购买</button>
 			</block>			
 		</view>
 
