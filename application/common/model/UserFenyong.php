@@ -110,7 +110,7 @@ class UserFenyong extends Common
             ->join('goods g', 'g.id = a.goods_id', 'LEFT')
             ->where(['a.order_id'=>$order_id, 'c.pay_status'=>2, 'c.user_id'=>$user_id])
             ->where('a.is_fenyong', 0)
-            ->field('a.*, c.user_id, c.ctime as create_time,c.pay_status,c.payed,g.goods_cat_id,a.promotion_amount')
+            ->field('a.*,c.ship_area_id, c.user_id, c.ctime as create_time,c.pay_status,c.payed,g.goods_cat_id,a.promotion_amount')
             ->select()
             ->toArray();
 
@@ -125,19 +125,31 @@ class UserFenyong extends Common
         }
 
 
-        if($userInfo['pid'] == 0){
-            return true;
-        }
+        // if($userInfo['pid'] == 0){
+        //     return true;
+        // }else{
+        //     //会员升级
+        // }
 
 
         foreach($order_items as $key => $v) {
 
             if($v['goods_cat_id'] == 1){
                 //套餐产品
+                if($userInfo['pid'] == 0 || $userInfo['grade'] <=1){
+                    continue;
+                }
+                $rate = 0;
+                if($userInfo['grade'] ==2){
+                    $rate = 0.08;
+                }elseif($userInfo['grade'] ==3){
+                    $rate = 0.12;
+                }
+                $profit = bcmul($v['payed'], $rate, 2);
 
-                
             } else{
                 //产品复购
+                $this->fenyong_grade($userInfo,$v);   //代理返佣
             }
 
         }   
@@ -145,6 +157,98 @@ class UserFenyong extends Common
     }
     
 
+    /*
+    * 代理返佣
+    * 区代、市代、省代（按收货地址划分）
+    * $area_id 收货地址ID
+    * $money 订单金额  
+    * 区级区域销售总额：0.3%
+    * 市级区域销售总额：0.3%
+    * 省级区域销售总额：0.4%
+    */
+    public function fenyong_grade($userInfo,$orderInfo)
+    { 
+        if($orderInfo['order_amount']<=0){
+            return;
+        }
+        $areaModel = new Area();
+        $data      = $areaModel->getParents($orderInfo['ship_area_id']);
+        if (empty($data) || count($data) < 3) { 
+            return;
+        }
 
+        $province_id = isset($data[0]['id']) ? $data[0]['id'] : null;          //省代
+        $city_id = isset($data[1]['id']) ? $data[1]['id'] : null;              //市代
+        $district_id = isset($data[2]['id']) ? $data[2]['id'] : null;
+
+        if (!$province_id || !$city_id || !$district_id) {
+            return;
+        }
+
+        $userModel = new User();
+        $provinces = $userModel->field("id,grade")->where(['area_id'=>$province_id])->count("id");
+        $citys = $userModel->field("id,grade")->where(['area_id'=>$city_id])->count("id");
+        $districts = $userModel->field("id,grade")->where(['area_id'=>$district_id])->count("id");  
+
+        if($districts==0 && $citys==0 && $provinces==0){
+            //找不到代理
+            return;
+        }
+        //区级代理
+        if($districts>0){ 
+            $rate = 0.3/100;
+            $profit = bcmul($orderInfo['order_amount'], $rate, 2);
+            $avg_profit = bcdiv($profit, $districts, 2);  //区级区域销售平均奖励
+            $disLst = $userModel->field("id,grade")->where(['area_id'=>$district_id])->select();
+            foreach ($disLst as $key => $val) {
+                $this->addDate(4,$val['id'],$val['grade'],$rate,$orderInfo['order_id'],$orderInfo['goods_id'],$orderInfo['product_id'],$orderInfo['order_amount'],$orderInfo['nums'], $avg_profit,$userInfo['id'],$userInfo['grade']);
+            }  
+        }
+        //市级代理
+        if($citys>0){ 
+            $rate = 0.3/100;
+            $profit = bcmul($orderInfo['order_amount'], $rate, 2);
+            $avg_profit = bcdiv($profit, $citys, 2);  //市级代理销售平均奖励
+            $cityLst = $userModel->field("id,grade")->where(['area_id'=>$city_id])->select();
+            foreach ($cityLst as $key => $val) {
+                $this->addDate(5,$val['id'],$val['grade'],$rate,$orderInfo['order_id'],$orderInfo['goods_id'],$orderInfo['product_id'],$orderInfo['order_amount'],$orderInfo['nums'], $avg_profit,$userInfo['id'],$userInfo['grade']);
+            }  
+        }
+        
+        //省级代理
+        if($provinces>0){ 
+            $rate = 0.4/100;
+            $profit = bcmul($orderInfo['order_amount'], $rate, 2);
+            $avg_profit = bcdiv($profit, $provinces, 2);  //省级代理销售平均奖励
+            $proLst = $userModel->field("id,grade")->where(['area_id'=>$province_id])->select();
+            foreach ($proLst as $key => $val) {
+                $this->addDate(6,$val['id'],$val['grade'],$rate,$orderInfo['order_id'],$orderInfo['goods_id'],$orderInfo['product_id'],$orderInfo['order_amount'],$orderInfo['nums'], $avg_profit,$userInfo['id'],$userInfo['grade']);
+            }  
+        }
+        return true;         
+
+    }
+
+    private function addDate($type,$receipt_id,$receipt_grade,$rate,$order_id,$goods_id,$product_id,$amount,$nums,$money,$contribute_id,$contribute_grade){
+
+        $data = [
+            'type'              => $type,
+            'receipt_id'        => $receipt_id,
+            'receipt_grade'     => $receipt_grade,
+            'rate'              => $rate,
+            'order_id'          => $order_id,
+            'goods_id'          => $goods_id,
+            'product_id'        => $product_id,
+            'amount'            => $amount,
+            'price'             => $amount,
+            'nums'              => $nums,
+            'money'             => $money,
+            'contribute_id'     => $contribute_id,
+            'contribute_grade'  => $contribute_grade,
+            'ctime'             => time(),
+        ];
+        $this->insert($data);
+        return $this->id;
+    }
 
 }

@@ -553,7 +553,7 @@ class Area extends Common
         return $re;
     }
     //递归取得所有的父节点
-    private function getParents($parent_id)
+    public function getParents($parent_id)
     {
         $data = [];
         $info = $this->where(['id' => $parent_id])->find();

@@ -66,6 +66,7 @@ export default {
 <style lang="scss">
 /*每个页面公共css */
 @import './static/css/style.css';
+@import './static/font/iconfont.css';
 @font-face {
   font-family: 'OPPOSANS';
   src: url('./static/font/OPPOSANS.ttf') format('truetype');

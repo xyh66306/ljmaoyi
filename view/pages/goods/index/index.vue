@@ -390,6 +390,7 @@
 				userInfo: {}, // 用户信息
 				kefupara: '', //客服传递资料
 				isbuy:true,
+				authBuy:true,
 			}
 		},
 		onLoad(options) {
@@ -568,7 +569,7 @@
 							} else if(this.userInfo.free_nums==0 && info.isfree){
 								this.isbuy = false;
 								this.iszero = false
-							}	
+							}
 							
 						}						
 

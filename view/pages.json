@@ -471,29 +471,18 @@
 			}
 		},
 		{
-			"path": "pages/promotion/seckill",
-			"style": {
-				"navigationBarTitleText": "秒杀列表"
-			}
-		},
-		{
-			"path": "pages/promotion/group",
-			"style": {
-				"navigationBarTitleText": "团购列表"
-			}
-		},
-		{
-			"path": "pages/promotion/pintuan",
-			"style": {
-				"navigationBarTitleText": "拼团列表"
-			}
-		},
-		{
 			"path": "pages/login/login/mobile",
 			"style": {
 				"navigationBarTitleText": "绑定手机号"
 			}
 		},
+		{
+			"path": "pages/vip/vip",
+			"style": {
+				"navigationBarTitleText": "VIP会员",
+				"navigationStyle": "custom"
+			}
+		},		
 		{
 			"path": "uni_modules/guyue-updater/pages/updater",
 			"style": {

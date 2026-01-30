@@ -38,50 +38,26 @@
 					</view>
 				</template>	
 			</view>
-			<view class="ss-order-menu-wrap flex ss-col-center" style="margin-top: -100rpx;">
+			<view class="card-vip" @click="goToPage('/pages/vip/vip')">
+				<view class="bg">
+					<image src="/static/images/user_vip.png" mode=""></image>
+				</view>
+				<view class="card-box">
+					<view class="left-box">
+						<view class="top">会员可享多项权益</view>
+						<view class="bottom">已过期</view>
+					</view>
+					<view class="vipbtn">立即续费</view>
+				</view>
+			</view>
+			<view class="ss-order-menu-wrap flex ss-col-center">
 				<view class="item"  v-for="(item, index) in orderItems" :key="index" @click="orderNavigateHandle('/pages/member/order/orderlist', item.index)">
 					<view class="item-img order_item-img">
 						<image :src='item.icon'></image>
 					</view>
 					<view class="item-name">{{ item.name }}</view>
 				</view>
-			</view>		
-<!-- 			<view class="ss-money-menu-wrap flex ss-col-center" v-if="hasLogin">
-				<view class="item"  @click="goToPage('/pages/member/dou/index')">
-					<view class="item-txt">{{userInfo.dou || "0.00"}}</view>
-					<view class="item-name">酒豆</view>
-				</view>			
-				<view class="item" @click="goToPage('/pages/member/balance/index')">
-					<view class="item-txt">{{userInfo.balance || "0.00" }}</view>
-					<view class="item-name">酒宝</view>
-				</view>	
-				<view class="item">
-					<view class="item-img">
-						<image src='/static/img/wallet_icon.png'></image>
-					</view>
-					<view class="item-name">我的钱包</view>
-				</view>					
-			</view> -->
-<!-- 			<view class="ss-money-menu-wrap flex ss-col-center" v-if="hasLogin">
-				<view class="item">
-					<view class="item-txt">{{userInfo.zjc || 0}}</view>
-					<view class="item-name">资金池</view>
-				</view>							
-				<view class="item" >
-					<view class="item-txt">{{userInfo.total_money || 0 }}</view>
-					<view class="item-name">预期收益</view>
-				</view>	
-				<view class="item" >
-					<view class="item-txt">{{userInfo.profit || 0 }}</view>
-					<view class="item-name">分红收益</view>
-				</view>					
-				<view class="item">
-					<view class="item-img">
-						<image src='/static/img/all_coupon.png'></image>
-					</view>
-					<view class="item-name">分红池</view>
-				</view>					
-			</view>	 -->		
+			</view>			
 			<view class="ss-power-menu-wrap flex ss-col-center">
 				<view class="item"  v-for="(item, index) in utilityMenus" :key="index"  @click="navigateToHandle(item.router)">
 					<view class="item-img">
@@ -712,4 +688,40 @@ image {
 	overflow: hidden;
 }
 
+
+.card-vip {
+	width: 690rpx;
+	height: 134rpx;
+	margin: -100rpx auto 0;
+	position: relative;
+	.bg {
+		width: 100%;
+		height: 100%;
+	}
+	.card-box {
+		position: absolute;
+		top:0rpx;
+		left:0rpx;
+		width: 690rpx;
+		height: 134rpx;
+		padding:0 35rpx 0 120rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		.left-box {
+			color:#ae5a2a;
+			font-size: 24rpx;
+		}
+		.vipbtn {
+			height: 52rpx;
+			line-height: 52rpx;
+			text-align: center;
+			padding: 0 10px;
+			background: #fff;
+			border-radius: 28rpx;
+			font-size: 26rpx;
+			color: #ae5a2a;
+		}
+	}
+}
 </style>

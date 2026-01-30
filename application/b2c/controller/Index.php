@@ -10,6 +10,7 @@ namespace app\b2c\controller;
 
 use app\common\controller\Base;
 use app\common\model\BillAftersales;
+use app\common\model\UserFenyong;
 use app\common\model\Payments;
 use app\common\model\User;
 use app\common\model\UserWx;
@@ -38,5 +39,12 @@ class Index extends Base
         return $this->fetch();
     }
 
+
+    public function ceshi(){
+        $userFenyong = new UserFenyong();
+        $res = $userFenyong->fenyong_grade(340102);
+        dump($res);
+
+    }
 
 }
