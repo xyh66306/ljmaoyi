@@ -4,7 +4,7 @@
 			class="cell-item add-title-item cell-item-mid right-img"
 			v-for="item in payments"
 			:key="item.code"
-			@click="subForm(item.code)"
+			@click="toPayHandler(item.code)"
 			v-if="!(type == 2 && item.code == 'balancepay')"
 		>
 			<view class="cell-item-hd">
@@ -22,37 +22,6 @@
 				<image class="cell-ft-next icon" src="/static/image/right.png"></image>
 			</view>
 		</view>
-
-		<view class="payArea" v-if="showPay">
-			<view class="pay-title">
-				<text v-show="AffirmStatus === 1">请输入6位支付密码</text>
-				<text v-show="AffirmStatus === 2">请设置6位支付密码</text>
-				<text v-show="AffirmStatus === 3">请确认6位支付密码</text>
-			</view>
-			<view class="pay-password" @click="onPayUp">
-				<view class="list">
-					<text v-show="passwordArr.length >= 1">●</text>
-				</view>
-				<view class="list">
-					<text v-show="passwordArr.length >= 2">●</text>
-				</view>
-				<view class="list">
-					<text v-show="passwordArr.length >= 3">●</text>
-				</view>
-				<view class="list">
-					<text v-show="passwordArr.length >= 4">●</text>
-				</view>
-				<view class="list">
-					<text v-show="passwordArr.length >= 5">●</text>
-				</view>
-				<view class="list">
-					<text v-show="passwordArr.length >= 6">●</text>
-				</view>
-			</view>
-		</view>
-		<cc-defineKeyboard ref="CodeKeyboard" passwrdType="pay" @KeyInfo="KeyInfo"></cc-defineKeyboard>	
-
-
 	</view>
 </template>
 
@@ -61,12 +30,6 @@ const ap = require('../../common/ap.js');
 import { baseUrl, weixinOpenAlipay } from '@/config/config.js';
 export default {
 	props: {
-		exp:{
-			type: Number,
-			default() {
-				return 2;
-			}
-		},
 		// 如果是商品订单此参数必须
 		orderId: {
 			type: String,
@@ -94,17 +57,16 @@ export default {
 			default() {
 				return 1;
 			}
-		}
+		},
+		openexp: {
+			type: Boolean,
+			default() {
+				return false;
+			}
+		}		
 	},
 	data() {
 		return {
-			code:'',
-			showPay:false,
-			AffirmStatus: 1,
-			passwordArr: [],
-			oldPasswordArr: [],
-			newPasswordArr: [],
-			afPasswordArr: [],					
 			payments: [],
 			openid: '',
 			popShow: false,
@@ -115,59 +77,11 @@ export default {
 		this.getPayments();
 	},
 	methods: {
-		/** * 唤起键盘 */
-		onPayUp() {
-			this.showPay = true
-			this.$refs.CodeKeyboard.show();
-		},
-		closePayUp() {
-			this.passwordArr = []
-			this.showPay = false
-			this.$refs.CodeKeyboard.hide();
-		},			
-		KeyInfo(val) {
-			let that = this;
-			
-			if (val.index >= 6) {
-				return;
-			}
-			// 判断是否输入的是删除键
-			if (val.keyCode === 8) {
-				// 删除最后一位
-				that.passwordArr.splice(val.index + 1, 1)
-			}
-			// 判断是否输入的是.
-			else if (val.keyCode == 190) {
-				// 输入.无效
-			} else {
-				that.passwordArr.push(val.key);
-			}
-			if (val.index == 5) {
-				let pwd_str = that.passwordArr.join('');
-				that.$api.authPaypwd({
-					paypwd:pwd_str
-				},res=>{
-					if(res.status){
-						that.toPayHandler();
-					}else{
-						that.closePayUp();
-						if(res.msg=="请先设置支付密码"){
-
-							that.$common.modelShow("温馨提示","请先设置支付密码",res=>{
-								that.$common.navigateTo("/pages/member/setting/user_info/resetpaypwd")
-							});
-
-						}else{
-							that.$common.errorToShow(res.msg)
-						}						
-					}
-				})
-				return;
-			}
-		},			
 		// 获取可用支付方式列表
 		getPayments() {
-			this.$api.paymentList({}, (res) => {
+			this.$api.paymentList({
+				exp:this.openexp
+			}, (res) => {
 				if (res.status) {
 					this.payments = this.formatPayments(res.data);
 				}
@@ -175,6 +89,7 @@ export default {
 		},
 		// 支付方式处理
 		formatPayments(payments) {
+						
 			// h5支付并且是在微信浏览器内 过滤支付宝支付
 			if (this.$common.isWeiXinBrowser() && !weixinOpenAlipay) {
 				payments = payments.filter((item) => item.code !== 'alipay');
@@ -183,16 +98,19 @@ export default {
 			// 如果是充值订单 过滤余额支付 过滤非线上支付方式
 			if (this.type === 2) {
 				payments = payments.filter((item) => item.code !== 'balancepay' || item.is_online === 1);
-				payments = payments.filter((item) => item.code !== 'yuanbao' || item.is_online === 1);
+			}
+
+			if (this.type === 2) {
+				payments = payments.filter((item) => item.code !== 'exppay' || item.is_online === 1);
 			}
 			
-			
-			if(this.exp == 1){
-				payments = payments.filter((item) => item.code !== 'yuanbao');
-			}
-			if(this.exp == 2){
-				payments = payments.filter((item) => item.code !== 'balancepay');
-			}
+			// if (this.type === 12) {
+			// 	payments = payments.filter((item) => item.code !== 'balancepay');
+			// }
+
+			// if (this.type === 12) {
+			// 	payments = payments.filter((item) => item.code !== 'exppay');
+			// }			
 
 			// 设置logo图片
 			payments.forEach((item) => {
@@ -236,14 +154,9 @@ export default {
 				}
 			);
 		},
-		subForm(code){
-			this.code = code 
-			this.onPayUp();
-		},
 		// 用户点击支付方式处理
-		toPayHandler() {
+		toPayHandler(code) {
 			this.popShow = true;
-			let code = this.code
 			let data = {
 				payment_code: code,
 				payment_type: this.type
@@ -336,18 +249,7 @@ export default {
 						var transitUrl = baseUrl + 'wap/pages/goods/payment/auth?order_id=' + this.orderId + '&type=' + this.type;
 
 						if ((this.type == 1 || this.type == 3 || this.type == 4 || this.type == 8 || this.type == 9 || this.type == 10 || this.type == 11) && this.orderId) {
-							// 微信jsapi支付
-							// if (this.openid) {
-							//   data['params'] = {
-							//     trade_type: 'JSAPI_OFFICIAL',
-							//     openid: this.openid
-							//   }
-							// } else {
-							//   data['params'] = {
-							//     trade_type: 'JSAPI_OFFICIAL',
-							//     url: window.location.href
-							//   }
-							// }
+
 							data['params'] = {
 								trade_type: 'JSAPI_OFFICIAL',
 								url: transitUrl
@@ -358,17 +260,12 @@ export default {
 								money: this.recharge,
 								url: transitUrl + '&uid=' + this.uid + '&money=' + this.recharge
 							};
-							// if (this.openid) {
-							//   data['params'] = {
-							//     money: this.recharge,
-							//     openid: this.openid
-							//   }
-							// } else {
-							//   data['params'] = {
-							//     money: this.recharge,
-							//     url: window.location.href
-							//   }
-							// }
+						} else if (this.type == 12 && this.recharge) {
+							data['params'] = {
+								trade_type: 'JSAPI_OFFICIAL',
+								money: this.recharge,
+								url: transitUrl + '&uid=' + this.uid + '&money=' + this.recharge
+							};
 						} else if ((this.type == 5 || this.type == 6) && this.recharge) {
 							data['params'] = {
 								formid: this.orderId,
@@ -376,6 +273,7 @@ export default {
 								url: transitUrl
 							};
 						}
+						console.log(data)
 						this.$api.pay(data, (res) => {
 							if (!res.status && res.data == '10066') {
 								window.location.href = res.msg;
@@ -407,6 +305,12 @@ export default {
 								trade_type: 'MWEB',
 								return_url: baseUrl + 'wap/pages/goods/payment/result'
 							};
+						} else if (this.type == 12 && this.recharge) {
+							data['params'] = {
+								trade_type: 'MWEB',
+								money: this.recharge,
+								return_url: baseUrl + 'wap/pages/goods/payment/result'
+							};
 						}
 						// 微信h5支付
 						this.$api.pay(data, (res) => {
@@ -432,20 +336,25 @@ export default {
 						data['params'] = {
 							formid: this.orderId
 						};
+					}else if (this.type == 12 && this.recharge) {
+						data['params'] = {
+							trade_type: 'MWEB',
+							money: this.recharge,
+							return_url: baseUrl + 'wap/pages/goods/payment/result'
+						};
 					}
 					this.$api.pay(data, (res) => {
 						if (res.status) {
 							this.$common.redirectTo('/pages/goods/payment/result?id=' + res.data.payment_id);
 						} else {
-							this.closePayUp();
 							this.payStatus = true;
 							this.$common.errorToShow(res.msg);
 						}
 					});
 					break;
-				case 'yuanbao':
+				case 'exppay':
 					/**
-					 *  用户元宝支付
+					 *  用户消费券支付
 					 *
 					 */
 					if (this.payStatus == false) {
@@ -461,7 +370,6 @@ export default {
 						if (res.status) {
 							this.$common.redirectTo('/pages/goods/payment/result?id=' + res.data.payment_id);
 						} else {
-							this.closePayUp();
 							this.payStatus = true;
 							this.$common.errorToShow(res.msg);
 						}
@@ -484,28 +392,28 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style>
 .payment-method .cell-item-hd {
-	min-width: 70upx;
+	min-width: 70rpx;
 }
 
 .payment-method .cell-hd-icon {
-	width: 70upx;
-	height: 70upx;
+	width: 70rpx;
+	height: 70rpx;
 }
 
 .payment-method .cell-item-bd {
-	border-left: 2upx solid #f0f0f0;
-	padding-left: 30upx;
+	border-left: 2rpx solid #f0f0f0;
+	padding-left: 30rpx;
 }
 
 .payment-method .cell-bd-text {
-	font-size: 28upx;
+	font-size: 28rpx;
 	color: #666;
 }
 
 .payment-method .address {
-	font-size: 24upx;
+	font-size: 24rpx;
 	color: #999;
 }
 
@@ -543,72 +451,6 @@ export default {
 }
 
 .payment-pop .text {
-	font-size: 24upx;
-}
-
-
-
-
-$base: orangered; 
-
-
-.payArea {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background-color: #FFFFFF;
-}
-.pay-title {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	height: 200rpx;
-
-	text {
-		font-size: 28rpx;
-		color: #555555;
-	}
-}
-
-.pay-password {
-	display: flex;
-	align-items: center;
-	width: 90%;
-	height: 80rpx;
-	margin: 20rpx auto;
-	border: 2rpx solid $base;
-
-	.list {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 16.666%;
-		height: 100%;
-		border-right: 2rpx solid #EEEEEE;
-
-		text {
-			font-size: 32rpx;
-		}
-	}
-
-	.list:nth-child(6) {
-		border-right: none;
-	}
-}
-
-.hint {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	height: 100rpx;
-
-	text {
-		font-size: 28rpx;
-		color: $base;
-	}
+	font-size: 24rpx;
 }
 </style>
