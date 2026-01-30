@@ -48,7 +48,6 @@ class ShopIndex extends Api
         }
 
         $noticeModel = new NoticeModel();
-
         $notice = $noticeModel->where('type',1)->find();
 
         $result['data']['notice'] = $notice;
