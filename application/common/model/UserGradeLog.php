@@ -53,6 +53,7 @@ class UserGradeLog extends Common
         $user               = new  User();
         $userInfo           =  $user->get($uid);
         $userInfo->grade    = $current_grade;
+        $userInfo->viptime  = time();
         $userInfo->save();
 
         return true;

@@ -211,6 +211,90 @@ class UserFenyong extends Common
     }
 
 
+    /**
+     * 4、区域每月销售总额1%，
+    * 符合条件的均分
+    * 1）资格要求：
+    *   直推 10 个 VIP
+    *   直推 5个合伙人
+    *   区级区域销售总额：0.3%
+    *   市级区域销售总额：0.3%
+    *   省级区域销售总额：0.4%
+     */
+    public function dailiFenyong(){
+
+        //查看所有代理
+        $userModel = new User();
+        $dailiLst = $userModel->where("area_id",">",0)->select();
+        $district_ids = $city_ids = $province_ids = [];
+        foreach($dailiLst as $key=>$val){ 
+             //是否符合条件
+             $vipCount = Db::name('user')->whereTime('viptime', 'month')->where(['pid'=>$val['id'],'grade'=>2])->count();
+             $hhrCount = Db::name('user')->whereTime('viptime', 'month')->where(['pid'=>$val['id'],'grade'=>3])->count();
+             if($vipCount>10 && $hhrCount>5){
+                $areaModel = new Area();
+                $areaInfo = $areaModel->where(['id'=>$val['area_id']])->find();
+                if($areaInfo['depth']==1){
+                    $province_ids[] = $val['id'];
+                }elseif($areaInfo['depth']==2){
+                    $city_ids[] = $val['id'];
+                }elseif($areaInfo['depth']==3){
+                    $district_ids[] = $val['id'];
+                }
+             }
+        }
+       $district_ids_count = count($district_ids);
+       $city_ids_count = count($city_ids);
+       $province_ids_count = count($province_ids);
+    
+       $nianyue = date("Y-m");
+       $balanceModel = new Balance();
+       //区级代理
+       if($district_ids_count>0){ 
+            for($i=0;$i<$district_ids_count;$i++){ 
+                $district_id = $district_ids[$i];
+                $dlqysy = Db::name("daili_tongji")->where(['area_id'=>$district_id,'nianyue'=>$nianyue])->value("money");   //区级区域销售总额
+                if($dlqysy>0){
+                    $localCount = $userModel->where("area_id",$district_id)->count("id");   //区级代理数量
+                    $fenyong = bcmul($dlqysy,0.3/100/$localCount,2);
+                    if($fenyong>0.1){
+                        $balanceModel->change($district_id,$balanceModel::TYPE_QUYUE,$fenyong);
+                    }
+                }
+            }
+        }
+        //市级代理
+       if($city_ids_count>0){ 
+            for($i=0;$i<$city_ids_count;$i++){ 
+                $city_id = $city_ids[$i];
+                $dlqysy = Db::name("daili_tongji")->where(['area_id'=>$city_id,'nianyue'=>$nianyue])->value("money");   //区级区域销售总额
+                if($dlqysy>0){
+                    $localCount = $userModel->where("area_id",$city_id)->count("id");   //区级代理数量
+                    $fenyong = bcmul($dlqysy,0.3/100/$localCount,2);
+                    if($fenyong>0.1){
+                        $balanceModel->change($city_id,$balanceModel::TYPE_QUYUE,$fenyong);
+                    }
+                }
+            }
+        }     
+        //省级代理
+        if($province_ids_count>0){ 
+            for($i=0;$i<$province_ids_count;$i++){ 
+                $province_id = $province_ids[$i];
+                $dlqysy = Db::name("daili_tongji")->where(['area_id'=>$province_id,'nianyue'=>$nianyue])->value("money");   //区级区域销售总额
+                if($dlqysy>0){
+                    $localCount = $userModel->where("area_id",$province_id)->count("id");   //区级代理数量
+                    $fenyong = bcmul($dlqysy,0.3/100/$localCount,2);
+                    if($fenyong>0.1){
+                        $balanceModel->change($province_id,$balanceModel::TYPE_QUYUE,$fenyong);
+                    }
+                }
+            }
+        }  
+        
+
+    }
+
     /*
     * 代理返佣
     * 区代、市代、省代（按收货地址划分）
