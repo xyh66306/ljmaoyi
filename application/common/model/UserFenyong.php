@@ -190,7 +190,11 @@ class UserFenyong extends Common
 
         $shouyier = Db::name('user')->where(['id'=>$shouyierOrderInfo['user_id']])->find();
 
-        $res = $this->addDate(3,$shouyier['id'],$shouyier['grade'],1,$v['order_id'],$v['goods_id'],$v['product_id'],$v['payed'],1,$v['payed'],$contributer['id'],$contributer['grade']);
+        //添加记录
+        $res = $this->addDate(3,$shouyier['id'],$shouyier['grade'],1,$v['order_id'],$v['goods_id'],$v['product_id'],$v['payed'],1,$v['payed'],$contributer['id'],$contributer['grade'],1);
+        //添加金额
+        $balanceModel = new Balance();
+        $balanceModel->change($shouyier['id'],$balanceModel::TYPE_GONGPAI,$v['payed']);
         if($res){
 
             $orderItemsCount = Db::name('order_items')->alias('a')
@@ -366,7 +370,7 @@ class UserFenyong extends Common
 
     }
 
-    private function addDate($type,$receipt_id,$receipt_grade,$rate,$order_id,$goods_id,$product_id,$amount,$nums,$money,$contribute_id,$contribute_grade){
+    private function addDate($type,$receipt_id,$receipt_grade,$rate,$order_id,$goods_id,$product_id,$amount,$nums,$money,$contribute_id,$contribute_grade,$expire=0){
 
         $data = [
             'type'              => $type,
@@ -380,6 +384,7 @@ class UserFenyong extends Common
             'price'             => $amount,
             'nums'              => $nums,
             'money'             => $money,
+            'expire'            => $expire,
             'contribute_id'     => $contribute_id,
             'contribute_grade'  => $contribute_grade,
             'ctime'             => time(),

@@ -22,6 +22,7 @@ class Balance extends Common
     const TYPE_ADMIN = 7;               //后台操作
     const TYPE_PRIZE = 8;               //奖励
     const TYPE_QUYUE = 9;               //区域分红奖励
+    const TYPE_GONGPAI = 10;              //公排奖励
 
     /**
      * 充值
@@ -148,7 +149,10 @@ class Balance extends Common
                 break;
             case self::TYPE_QUYUE:
                 $result['data'] = '区域分红奖励'. $money . '元';
-                break;                
+                break;   
+            case self::TYPE_GONGPAI:
+                $result['data'] = '公排奖励'. $money . '元';
+                break;                 
             default:
                 return error_code(10000);
         }
