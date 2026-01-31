@@ -144,13 +144,6 @@
 						unshowItem: false,
 						nums: 0
 					},
-					sign: {
-						name: '签到',
-						icon: '/static/img/pow_01.png',
-						router: '/pages/index/sign',
-						unshowItem: false,
-						nums: 0
-					},
 					balance: {
 						name: '充值',
 						icon: '/static/img/pow_02.png',
@@ -185,14 +178,7 @@
 						router: '/pages/member/coupon/index',
 						unshowItem: false,
 						nums: 0
-					},					
-					integral: {
-						name: '我的代金券',
-						icon: '/static/img/pow_08.png',
-						router: '/pages/member/integral/index',
-						unshowItem: false,
-						nums: 0
-					},					
+					},				
 				},
 				list: 2,
 				suTipStatus: false,

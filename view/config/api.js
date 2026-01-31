@@ -998,3 +998,5 @@ export const getMonthEarnings = (data, callback) => post('user.getMonthEarnings'
 
 //获取我的收益每月每天详细数据
 export const getDayEarnings = (data, callback) => post('user.getDayEarnings', data, callback);
+
+export const yjLogin = (data, callback) => post('user.yjLogin', data, callback);

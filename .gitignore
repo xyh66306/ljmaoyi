@@ -6,6 +6,6 @@
 /view/unpackage/dist/*
 /view/unpackage/release/*
 /thinkphp/*
-/config/database.php
+/config/*
 /runtime/*
 /runtime/cache/*

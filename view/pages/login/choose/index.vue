@@ -1,114 +1,210 @@
 <template>
 	<view class="content">
-		<view class="login-m">
-			<view class="login-item">
-				<view class="logo">
-					<!-- #ifdef MP-ALIPAY -->
-					<image class="toutiao-logo" :src="logoImage"></image>
-					<!-- #endif -->
-
-					<!-- #ifdef MP-TOUTIAO -->
-					<image class="toutiao-logo" :src="logoImage"></image>
-					<!-- #endif -->
-
-					<!-- #ifndef MP-TOUTIAO || MP-ALIPAY -->
-					<open-data type="userAvatarUrl"></open-data>
-					<!-- #endif -->
+		<view class="login-t"><image class="login-logo" :src="logoImage" mode="aspectFill"></image></view>
+		<view class="login-b">
+			<view>
+				<template v-if="checked">
+					<button open-type="getPhoneNumber" class="tip_btn" @getphonenumber="getphone" hover-class="btn-hover">手机号一键登录</button>
+				</template>
+				<template v-else>
+					<view class="tip_btn" @click="tips()">手机号一键登录</view>
+				</template>
+				<view class="color-9 fsz24 agreement">
+					<view class="agree" >
+						<image :src="checkedImg[checkedindex]" @click="checkedChange()"></image>
+					</view>
+					<view class="right">
+						同意
+						<text @click="goAgreement()" class="color-o">用户协议</text>
+						和
+						<text @click="goPrivacy()" class="color-o">隐私政策</text>						
+					</view>
 				</view>
 			</view>
-			<view class="login-tip">
-				<view class="login-tip-big">申请获取以下权限</view>
-				<view class="login-tip-small">获得你的公开信息</view>
-				<view class="color-9a text-normal agreement">
-					<checkbox color="#FF7159" :checked="agreeCheckbox" @tap="agreeCheckboxChange" class="checkboxNo" />
-					我已阅读并同意
-					<text @click="goAgreement()" class="color-1a"> 用户协议 </text>
-					和
-					<text @click="goPrivacy()" class="color-1a"> 隐私协议 </text>
-				</view>
-			</view>
-		</view>
-		<view class="login-b flc">
-			<!-- #ifdef MP-WEIXIN -->
-			<button class="auth-btn refuse" @click="handleRefuse">拒绝</button>
-			<button class="auth-btn" @click="getUserProfile" hover-class="btn-hover">允许</button>
-			<!-- #endif -->
-			<!-- #ifdef MP-ALIPAY -->
-			<button class="auth-btn" @click="getALICode" hover-class="btn-hover">授权登录</button>
-			<!-- #endif -->
-			<!-- #ifdef MP-TOUTIAO -->
-			<text class="auth-btn" @click="ttLogin()" hover-class="btn-hover">授权登录</text>
-			<!-- #endif -->
 		</view>
 		<!-- #ifdef MP-WEIXIN -->
 		<jshopPrivacy></jshopPrivacy>
-		<!-- #endif -->
+		<!-- #endif -->		
 	</view>
 </template>
 
 <script>
+import { goBack, jumpBackPage } from '@/config/mixins.js';
 import jshopPrivacy from '@/components/jshop-privacy/jshop-privacy';
 export default {
+	mixins: [goBack, jumpBackPage],
 	components: {
 		jshopPrivacy
 	},
 	data() {
 		return {
-			open_id: '',
-			agreeCheckbox:false,
+			checkedImg:['/static/image/quan.png','/static/image/success.png'],
+			checked:false,
+			checkedindex:0,
+			maxMobile: 11,
+			mobile: '', // 用户手机号
+			code: '', // 短信验证码
+			user_wx_id: '', //授权id
+			verification: true, // 通过v-show控制显示获取还是倒计时
+			timer: 60, // 定义初始时间为60s
+			btnb: 'btn btn-square btn-c btn-all', //按钮背景
+			type: '', // 有值是第三方登录账号绑定
+			isWeixinBrowser: this.$common.isWeiXinBrowser()
 		};
 	},
+	onLoad(option) {
+		const _this = this
+		// #ifdef MP-WEIXIN
+		this.getCode(function(code) {
+		  var data = {
+			code: code
+		  }
+		  _this.$api.login1(data, (res)=>{
+			if (!res.status) {
+			  _this.$common.successToShow(res.msg, function() {
+				uni.navigateBack({
+				  delta: 1
+				})
+			  })
+			} else {
+			  _this.open_id = res.data
+			}
+		  })
+		})
+		// #endif		
+		if (option.user_wx_id) {
+			this.user_wx_id = option.user_wx_id;
+			uni.setNavigationBarTitle({
+				title: '绑定手机号'
+			});
+		}	
+	},
 	computed: {
+		// 验证手机号
+		rightMobile() {
+			let res = {};
+			if (!this.mobile) {
+				res.status = false;
+				res.msg = '请输入手机号';
+			} else if (!/^1[3456789]{1}\d{9}$/gi.test(this.mobile)) {
+				res.status = false;
+				res.msg = '手机号格式不正确';
+			} else {
+				res.status = true;
+			}
+			return res;
+		},
+		// 动态计算发送验证码按钮样式
+		sendCodeBtn() {
+			let btn = 'btn btn-g';
+			if (this.mobile.length === this.maxMobile && this.rightMobile.status) {
+				return btn + ' btn-b';
+			} else {
+				return btn;
+			}
+		},
+		// 动态更改登录按钮bg
+		regButtonClass() {
+			return this.mobile && this.mobile.length === this.maxMobile && this.code ? this.btnb + ' btn-b' : this.btnb;
+		},
 		logoImage() {
 			return this.$store.state.config.shop_logo;
 		}
 	},
-	onLoad() {
-		const _this = this;
-		// #ifdef MP-WEIXIN
-		this.getCode(function (code) {
-			var data = {
-				code: code
-			};
-			_this.$api.login1(data, (res) => {
-				if (!res.status) {
-					_this.$common.successToShow(res.msg, function () {
-						uni.navigateBack({
-							delta: 1
-						});
-					});
-				} else {
-					_this.open_id = res.data;
-				}
+	onShow() {
+		let _this = this;
+		let userToken = _this.$db.get('userToken');
+		if (userToken) {
+			uni.switchTab({
+				url: '/pages/member/index/index'
 			});
-		});
-		// #endif
+			return true;
+		}
+		_this.timer = parseInt(_this.$db.get('timer'));
+		if (_this.timer != null && _this.timer > 0) {
+			_this.countDown();
+			_this.verification = false;
+		}
+		// let privacy = this.$db.get('privacy');
+		// if(privacy){
+		// 	this.checkedindex =1
+		// 	this.checked = true
+		// }
 	},
-	// #ifdef MP-WEIXIN
-
-	// #endif
 	methods: {
-		getCode: function (callback) {
-			uni.login({
-				// #ifdef MP-ALIPAY
-				scopes: 'auth_user',
-				// #endif
-				success: function (res) {
-					if (res.code) {
-						return callback(res.code);
-					} else {
-						//login成功，但是没有取到code
-						this.$common.errorToShow('未取得code');
+		checkedChange(){
+			this.checked = !this.checked;
+			if(this.checked){
+				this.checkedindex =1
+			} else {
+				this.checkedindex = 0
+			}
+		},
+		getCode: function(callback) {
+		  uni.login({
+			// #ifdef MP-ALIPAY
+			scopes: 'auth_user',
+			// #endif
+			success: function(res) {
+			  if (res.code) {
+				return callback(res.code)
+			  } else {
+				//login成功，但是没有取到code
+				this.$common.errorToShow('未取得code')
+			  }
+			},
+			fail: function(res) {
+			  this.$common.errorToShow('用户授权失败wx.login')
+			}
+		  })
+		},
+		tips(){
+			var that = this;
+			if(!that.checked){
+				return that.$common.successToShow('请先同意用户协议和隐私政策');
+			}			
+		},
+		getphone(e){	
+			var detail = e.detail;
+			var that = this;
+			if(!that.checked){
+				return that.$common.successToShow('请先同意用户协议和隐私政策');
+			}
+			if(detail.errMsg == 'getPhoneNumber:fail user deny'){
+				return that.$common.successToShow('您拒绝了授权');
+			}
+
+			if(detail.errMsg == 'getPhoneNumber:ok'){
+				var code = detail.code;
+				let invicode = that.$db.get('invitecode');
+				that.$api.yjLogin({
+					code:code,
+					invicode:invicode,
+					open_id:that.open_id
+				},res=>{
+					if(res.status){
+						that.$db.set('userToken', res.data);
+						that.redirectHandler();
 					}
-				},
-				fail: function (res) {
-					this.$common.errorToShow('用户授权失败wx.login');
-				}
+				})
+			}
+		},
+		// 重定向跳转 或者返回上一个页面
+		redirectHandler() {
+			this.$common.successToShow('登录成功!', () => {
+				this.$db.set('timer', 0);
+				this.$db.del('invitecode');
+				// this.handleBack();
+				uni.navigateBack({
+				    delta: 1
+				});
 			});
 		},
-		//隐私协议复选框
-		agreeCheckboxChange(){
-			this.agreeCheckbox = !this.agreeCheckbox
+		// 跳转到普通登录
+		toLogin() {
+			uni.navigateTo({
+				url: '../../login/login/index'
+			});
 		},
 		// 跳转到用户协议
 		goAgreement() {
@@ -120,264 +216,111 @@ export default {
 			let articleId = this.$store.state.config.privacy_policy_id;
 			this.$common.navigateTo('/pages/article/index?id_type=1&id=' + articleId);
 		},
-		handleRefuse() {
-			uni.showToast({
-				title: '未授权',
-				icon: 'none',
-				duration: 1000
-			});
-			setTimeout(() => {
-				uni.hideToast();
-				uni.navigateBack(-1);
-			}, 1000);
-		},
-		getUserProfile() {
-			let _this = this;
-			if(_this.agreeCheckbox){
-				wx.getUserProfile({
-					desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-					success: (res) => {
-						var data = {
-							open_id: _this.open_id,
-							iv: res.iv,
-							edata: res.encryptedData,
-							signature: res.signature,
-							uuid: this.$common.getUuid()
-						};
-						//有推荐码的话，带上
-						var invitecode = _this.$db.get('invitecode');
-						if (invitecode) {
-							data.invitecode = invitecode;
-						}
-						_this.toLogin(data);
-					},
-					fail: (res) => {
-						_this.$common.errorToShow('未授权');
-					},
-				})
-			}else{
-				this.$common.errorToShow('请先阅读并同意用户协议和隐私协议');
-			}
-		},
-		//实际的去登陆
-		toLogin: function (data) {
-			let _this = this;
-			_this.$api.login2(data, function (res) {
-				if (res.status) {
-					//判断是否返回了token，如果没有，就说明没有绑定账号，跳转到绑定页面
-					if (typeof res.data.token == 'undefined') {
-						uni.redirectTo({
-							url: '/pages/login/login/index?user_wx_id=' + res.data.user_wx_id
-						});
-					} else {
-						//登陆成功，设置token，并返回上一页
-						_this.$db.set('userToken', res.data.token);
-						uni.navigateBack({
-							delta: 1
-						});
-						return false;
-					}
-				} else {
-					// _this.$common.errorToShow('登录失败，请重试')
-					_this.$common.errorToShow(res.msg, () => {
-						// 绑定手机号
-						if (res.data === '11027') {
-							_this.$db.set('userToken', res.token);
-							_this.$common.navigateTo('/pages/login/mobile/index');
-						}
-					});
-				}
-			});
-		},
-		// #ifdef MP-ALIPAY
-		getALICode() {
-			let that = this;
-			uni.login({
-				scopes: 'auth_user',
-				success: (res) => {
-					if (res.authCode) {
-						uni.getUserInfo({
-							provider: 'alipay',
-							success: function (infoRes) {
-								if (infoRes.errMsg == 'getUserInfo:ok') {
-									let user_info = {
-										nickname: infoRes.nickName,
-										avatar: infoRes.avatar
-									};
-									that.aLiLoginStep1(res.authCode, user_info);
-								}
-							},
-							fail: function (errorRes) {
-								that.$common.errorToShow('未取得用户昵称头像信息');
-							}
-						});
-					} else {
-						that.$common.errorToShow('未取得code');
-					}
-				},
-				fail: function (res) {
-					that.$common.errorToShow('用户授权失败my.login');
-				}
-			});
-		},
-		aLiLoginStep1(code, user_info) {
-			let data = {
-				code: code,
-				user_info: user_info
-			};
-			this.$api.alilogin1(data, (res) => {
-				this.alipayNoLogin = false;
-				if (res.status) {
-					this.open_id = res.data.user_wx_id;
-					//判断是否返回了token，如果没有，就说明没有绑定账号，跳转到绑定页面
-					if (!res.data.hasOwnProperty('token')) {
-						this.$common.redirectTo('/pages/login/login/index?user_wx_id=' + res.data.user_wx_id);
-					} else {
-						this.$db.set('userToken', res.data.token);
-						uni.navigateBack({
-							delta: 1
-						});
-					}
-				} else {
-					this.$common.errorToShow(res.msg);
-				}
-			});
-		},
-		// #endif
-		// #ifdef MP-TOUTIAO
-		ttLogin() {
-			let that = this;
-			uni.login({
-				provider: 'toutiao',
-				success: (res) => {
-					//console.log(res);
-					if (res.errMsg == 'login:ok') {
-						uni.getUserInfo({
-							provider: 'toutiao',
-							success: function (infoRes) {
-								//console.log(infoRes);
-								if (infoRes.errMsg == 'getUserInfo:ok') {
-									let code = res.code;
-									let user_info = {
-										nickname: infoRes.userInfo.nickName,
-										avatar: infoRes.userInfo.avatarUrl,
-										gender: infoRes.userInfo.gender,
-										language: infoRes.userInfo.language,
-										country: infoRes.userInfo.country,
-										city: infoRes.userInfo.city,
-										province: infoRes.userInfo.province
-									};
-									that.ttLoginStep(code, user_info);
-								}
-							},
-							fail: function (errorRes) {
-								this.$common.errorToShow('未取得用户昵称头像信息');
-							}
-						});
-					} else {
-						this.$common.errorToShow('未取得code');
-					}
-				},
-				fail: function (res) {
-					this.$common.errorToShow('用户授权失败my.login');
-				}
-			});
-		},
-		ttLoginStep(code, userInfo) {
-			let data = {
-				code: code,
-				user_info: userInfo
-			};
-			this.$api.ttlogin(data, (res) => {
-				if (res.status) {
-					if (!res.data.hasOwnProperty('token')) {
-						this.$common.redirectTo('/pages/login/login/index?user_wx_id=' + res.data.user_id);
-					} else {
-						this.$db.set('userToken', res.data.token);
-						uni.navigateBack({
-							delta: 1
-						});
-					}
-				} else {
-					this.$common.errorToShow(res.msg);
-				}
-			});
-		}
-		// #endif
 	}
 };
 </script>
 
 <style lang="scss">
 .content {
-	background-color: #fff;
+	/*  #ifdef  H5  */
+	height: calc(100vh - 90upx);
+	/*  #endif  */
+	/*  #ifndef  H5  */
 	height: 100vh;
-	padding: 100upx 60upx 0;
+	/*  #endif  */
+	background-color: #fff;
+
+	padding: 0upx 100upx;
 }
-.login-item {
-	display: flex;
-	justify-content: center;
-	padding-bottom: 40upx;
-	border-bottom: 1upx solid #dddddd;
+.login-t {
+	text-align: center;
+	padding: 50upx 0;
 }
-.logo {
-	display: block;
+.login-logo {
 	width: 180upx;
 	height: 180upx;
-	border-radius: 50%;
+	border-radius: 20upx;
+	background-color: #f8f8f8;
+}
+.login-m {
+	margin-bottom: 100upx;
+}
+.login-item {
+	border-bottom: 2upx solid #d0d0d0;
 	overflow: hidden;
-	border: 2px solid #fff;
-	box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+	padding: 10upx;
+	color: #333;
+	margin-bottom: 30upx;
 }
-.login-tip {
-	padding: 60upx 0;
-	&-big {
-		font-size: 28upx;
-		line-height: 80upx;
-	}
-	&-small {
-		font-size: 12px;
-		color: #9e9e9e;
-	}
+.login-item-input {
+	display: inline-block;
+	flex: 1;
+	box-sizing: border-box;
 }
-.agreement {
-	margin: 20rpx 0;
-	//text-align: center;
-	height: 30rpx;
-	line-height: 30rpx;
-	display: flex;
-	//justify-content: center;
-	//align-items: center;
-	color: #9e9e9e;
-	.color-1a {
-		margin: 0 10rpx;
-		color: #000;
+.login-item .btn {
+	border: none;
+	width: 40%;
+	text-align: right;
+	padding: 0;
+	&.btn-b {
+		background: none;
+		color: #333 !important;
 	}
 }
-.app-name {
-	font-size: 28upx;
+
+
+.login-b {
+	margin-top: 100rpx;
+}
+
+.login-b .btn {
 	color: #999;
 }
-.login-b .btn-g {
-	margin-top: 40upx;
+.btn-b {
+	color: #fff !important;
 }
-.auth-btn {
-	flex: 1;
-	display: block;
-	height: 80upx;
-	line-height: 80upx;
-	text-align: center;
-	font-size: 12px;
-	color: #fff;
-	background: #1aad19;
-	border-radius: 40upx;
-	&.refuse {
-		background: #999;
-		margin-right: 40upx;
+.login-other {
+	margin-bottom: 40upx;
+	.item {
+		padding: 20upx 0;
 	}
 }
-.toutiao-logo {
+.btn-square {
+	color: #333;
+}
+
+.agreement {
+	display: flex;
+	margin: 500rpx 0;
+	text-align: center;
+	.color-o {
+		margin: 0 10rpx;
+	}
+	.agree {
+		width:35rpx;
+		height: 35rpx;
+		margin-right: 10rpx;
+		image {
+			width: 100%;
+			height: 100%;
+		}
+	}
+}
+.goforgetpwd {
 	width: 100%;
-	height: 100%;
+	text-align: right;
+}
+
+
+.tip_btn {
+	with:400rpx;
+	height:92rpx;
+	line-height:92rpx;
+	text-align:center;
+	background:#51b352;
+	color:#fff;
+	border-radius:10rpx;
+	margin:0 auto;
+	font-size:36rpx;
 }
 </style>

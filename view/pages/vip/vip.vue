@@ -1,5 +1,6 @@
 <template>
 	<view class="content">
+		<hx-navbar title="会员中心" :backgroundColor="bgColor" color="#fff"/>
         <view class="topArea">
 			<view class="bg">
 				<image src="/static/images/vip_bg.png" mode=""></image>
@@ -31,15 +32,8 @@
 				</view>
 			</view>
 			<view class="hyqyItems">
-				<view class="items" v-for="(vo,index) in qyItems" :key="index">
-					<image :src="vo.image" mode=""></image>
-					<view class="info">
-						<view class="name">{{vo.name}}</view>
-						<view class="desc">{{vo.desc}}</view>
-					</view>
-				</view>
 				<template v-if="index==0">
-					<view class="items"  v-for="(vo,idx) in vipqy" :key="'vip'+idx">
+					<view class="items vip"  v-for="(vo,idx) in vipqy" :key="idx">
 						<image :src="vo.image" mode=""></image>
 						<view class="info">
 							<view class="name">{{vo.name}}</view>
@@ -48,13 +42,13 @@
 					</view>
 				</template>
 				<template v-if="index==1">
-				<view class="items" v-for="(vo,idx2) in hhrqy" :key="'hhr'+idx2">
-					<image :src="vo.image" mode=""></image>
-					<view class="info">
-						<view class="name">{{vo.name}}</view>
-						<view class="desc">{{vo.desc}}</view>
-					</view>
-				</view>	
+					<view class="items hhy" v-for="(vo,idx2) in hhrqy" :key="idx2">
+						<image :src="vo.image" mode=""></image>
+						<view class="info">
+							<view class="name">{{vo.name}}</view>
+							<view class="desc">{{vo.desc}}</view>
+						</view>
+					</view>	
 				</template>
 			</view>
 		</view>
@@ -81,7 +75,7 @@
 				</view>				
 			</view>
 			<view class="agree">
-				购买即视为同意 <text class="mark"><<会员用户协议>></text>
+				购买即视为同意 <text class="mark">会员用户协议</text>
 			</view>
 			<view class="buyBtn" @click="goPay()">
 				立即支付
@@ -117,15 +111,19 @@
 </template>
 
 <script>
+	
+import hxNavbar from "@/components/hx-navbar/hx-navbar.vue"
 import { mapGetters } from 'vuex';
 import { goods } from '@/config/mixins.js';	
 import { apiBaseUrl } from '@/config/config.js';	
 export default {
 	mixins: [goods],
+	components: {hxNavbar},
 	data() {
 		return {
+			bgColor:[53, 56, 65],
 			userInfo:{},
-			qyItems:[
+			vipqy:[
 				{
 					image: apiBaseUrl+'app/images/qy_01.png',
 					name: '会员优惠',
@@ -145,9 +143,7 @@ export default {
 					image: apiBaseUrl+'app/images/qy_06.png',
 					name: '消费返利',
 					desc: '消费返多倍红包'
-				}				
-			],
-			vipqy:[
+				},				
 				{
 					image: apiBaseUrl+'app/images/qy_02.png',
 					name: 'VIP权益',
@@ -160,6 +156,26 @@ export default {
 				}				
 			],
 			hhrqy:[
+				{
+					image: apiBaseUrl+'app/images/qy_01.png',
+					name: '会员优惠',
+					desc: '每月获得优惠'
+				},
+				{
+					image: apiBaseUrl+'app/images/qy_03.png',
+					name: '签到返利',
+					desc: '每日签到返积分'
+				},
+				{
+					image: apiBaseUrl+'app/images/qy_05.png',
+					name: '专属特价',
+					desc: '商品享特价优惠'
+				},
+				{
+					image: apiBaseUrl+'app/images/qy_06.png',
+					name: '消费返利',
+					desc: '消费返多倍红包'
+				},				
 				{
 					image: apiBaseUrl+'app/images/qy_02.png',
 					name: '合伙人权益',
@@ -202,7 +218,7 @@ export default {
 		this.getUserInfo();
 		this.getCateData();
 	},
-	methods: {
+	methods: {	
 		goToDetails(id){
 			this.goodsDetail(id);
 		},

@@ -250,18 +250,6 @@
 			}
 		},
 		{
-			"path": "pages/member/take_delivery/index",
-			"style": {
-				"navigationBarTitleText": "提货单核销"
-			}
-		},
-		{
-			"path": "pages/member/take_delivery/list",
-			"style": {
-				"navigationBarTitleText": "提货单列表"
-			}
-		},
-		{
 			"path": "pages/goods/index/index",
 			"style": {
 				// #ifdef H5
@@ -420,25 +408,6 @@
 			}
 		},
 		{
-			"path": "pages/classify/pintuan_list",
-			"style": {
-				"navigationBarTitleText": "拼团列表"
-			}
-		},
-		{
-			"path": "pages/goods/index/pintuan",
-			"style": {
-				"navigationBarTitleText": "拼团详情",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/form/detail/form",
-			"style": {
-				"navigationBarTitleText": "万能表单"
-			}
-		},
-		{
 			"path": "pages/share/jump",
 			"style": {
 				// #ifdef H5
@@ -464,11 +433,6 @@
 			"style": {
 				"navigationBarTitleText": "绑定手机号"
 			}
-		}, {
-			"path": "pages/member/bargain/list",
-			"style": {
-				"navigationBarTitleText": "砍价记录"
-			}
 		},
 		{
 			"path": "pages/login/login/mobile",
@@ -480,25 +444,7 @@
 			"path": "pages/vip/vip",
 			"style": {
 				"navigationBarTitleText": "VIP会员",
-				"navigationStyle": "custom"
-			}
-		},		
-		{
-			"path": "uni_modules/guyue-updater/pages/updater",
-			"style": {
-				"app-plus": {
-					"animationDuration": 200,
-					"animationType": "fade-in",
-					"background": "transparent",
-					"backgroundColorTop": "transparent",
-					"bounce": "none",
-					"popGesture": "none",
-					"scrollIndicator": false,
-					"titleNView": false
-				},
-				"backgroundColor": "transparent",
-				"disableScroll": true,
-				"navigationStyle": "custom"
+				"navigationStyle": "custom" 
 			}
 		}
 	],
