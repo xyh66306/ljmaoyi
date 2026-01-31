@@ -15,6 +15,7 @@ use app\common\model\OperationLog;
 use app\common\model\Order;
 use app\common\model\PintuanRecord;
 use app\common\model\User;
+use app\common\model\UserFenyong;
 use app\common\model\UserPointLog;
 use think\facade\Cache;
 
@@ -176,4 +177,16 @@ class Crontab extends Base
         $bargainRecordModel->bargainCancle();
         return json_encode(['status' => true, 'msg' => '取消成功']);
     }
+
+    /***
+     * 代理分红
+     */
+    public function agentDividend()
+    { 
+        $nianyue = date('Y-m');
+        $userFenyong = new UserFenyong();
+        $userFenyong->dailiFenyong();
+        return json_encode(['status' => true, 'msg' => $nianyue.'分红成功']);
+    }
+
 }
