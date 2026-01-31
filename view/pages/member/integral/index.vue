@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class="integral-top">
 			<view class="integral-top-t">
-				可用代金券
+				可用积分
 			</view>
 			<view class="integral-top-n">
 				{{ userInfo.point ? userInfo.point : "0.00"}}
@@ -16,7 +16,7 @@
 				<view class='cell-item add-title-item cell-title'>
 					<view class='cell-item-bd'>
 						<view class="cell-bd-view black-text">
-							<text class="cell-bd-text">代金券记录</text>
+							<text class="cell-bd-text">积分记录</text>
 						</view>
 					</view>
 				</view>
@@ -63,7 +63,7 @@
 				userInfo:{},
 				page: 1,
 				limit: 10,
-				pointList: [], // 代金券记录
+				pointList: [], // 积分记录
 				loadStatus: 'more'
 			}
 		},

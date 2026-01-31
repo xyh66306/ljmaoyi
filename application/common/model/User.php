@@ -549,7 +549,7 @@ class User extends Common
             } else {
                 $userInfo['password'] = false;
             }
-
+            $userInfo['quyu'] = 0;
             $result['data'] = $userInfo;
             $result['status'] = true;
         } else {

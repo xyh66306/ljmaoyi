@@ -2,7 +2,7 @@
 	<view>
 		<view class="topArea">
 			<view class="wallteArea">
-				<view class="wallte_tit">钱包酒宝（元）</view>
+				<view class="wallte_tit">钱包余额（元）</view>
 				<view class="wallte_info">
 					<view class="money_nums">{{userInfo.balance}}</view>
 				</view>
@@ -23,46 +23,18 @@
 				</view>
 				<view class='cell-item user-head'>
 					<view class='cell-item-hd'>
-						<view class='cell-hd-title'>转赠酒宝</view>
+						<view class='cell-hd-title'>转赠余额</view>
 					</view>
 					<view class='cell-item-bd'>
-						<input class='cell-bd-input' type="number" placeholder='请填写转赠酒宝' v-model="balance"></input>
+						<input class='cell-bd-input' type="number" placeholder='请填写转赠余额' v-model="balance"></input>
 					</view>
 				</view>
 			</view>	
 		</view>
-		<view class="payArea" v-if="showPay">
-			<view class="pay-title">
-				<text v-show="AffirmStatus === 1">请输入6位支付密码</text>
-				<text v-show="AffirmStatus === 2">请设置6位支付密码</text>
-				<text v-show="AffirmStatus === 3">请确认6位支付密码</text>
-			</view>
-			<view class="pay-password" @click="onPayUp">
-				<view class="list">
-					<text v-show="passwordArr.length >= 1">●</text>
-				</view>
-				<view class="list">
-					<text v-show="passwordArr.length >= 2">●</text>
-				</view>
-				<view class="list">
-					<text v-show="passwordArr.length >= 3">●</text>
-				</view>
-				<view class="list">
-					<text v-show="passwordArr.length >= 4">●</text>
-				</view>
-				<view class="list">
-					<text v-show="passwordArr.length >= 5">●</text>
-				</view>
-				<view class="list">
-					<text v-show="passwordArr.length >= 6">●</text>
-				</view>
-			</view>
-		</view>
-		<cc-defineKeyboard ref="CodeKeyboard" passwrdType="pay" @KeyInfo="KeyInfo"></cc-defineKeyboard>
+
 		
-		
-		<view class="button-bottom" v-if="showPay==false">
-			<button class="btn btn-square btn-b" hover-class="btn-hover2" @click="subForm()" :disabled='submitStatus'
+		<view class="button-bottom">
+			<button class="btn btn-square btn-b" hover-class="btn-hover2" @click="submitJiuBao()" :disabled='submitStatus'
 			 :loading='submitStatus'>提交</button>
 		</view>
 	</view>
@@ -116,95 +88,24 @@
 					})
 				}
 			    
-			},
-			subForm(){
-				if(!this.userInfo.paypwd){
-					this.$common.modelShow("温馨提示","请先设置支付密码",res=>{
-						this.$common.navigateTo("/pages/member/setting/user_info/resetpaypwd")
-					});
-					this.submitStatus = false;
-					return;
-				}
+			},		
+			submitJiuBao(){
+				this.submitStatus = true;
 				if (!this.rightMobile.status) {
 					this.$common.errorToShow(this.rightMobile.msg);
 					this.submitStatus = false;
 					return;
 				}
-				let balance = parseInt(this.balance);
-				let userbalance = parseInt(this.userInfo.balance)
-				
-				if(!balance || balance<0){
+				if(!this.balance || this.balance<0){
 					this.$common.errorToShow("请输入酒宝数量");
 					this.submitStatus = false;
 					return;
 				}
-
-				
-				if(balance>userbalance){
+				if(this.balance>this.userInfo.balance){
 					this.$common.errorToShow("酒宝不足");
 					this.submitStatus = false;
 					return;
 				}
-				this.onPayUp();
-			},
-			/** * 唤起键盘 */
-			onPayUp() {
-				this.showPay = true
-				this.$refs.CodeKeyboard.show();
-			},
-			closePayUp() {
-				this.showPay = false
-				this.passwordArr = [];
-				this.$refs.CodeKeyboard.hide();
-			},			
-			KeyInfo(val) {
-				let that = this;
-				
-				if (val.index >= 6) {
-					return;
-				}
-				// 判断是否输入的是删除键
-				if (val.keyCode === 8) {
-					// 删除最后一位
-					that.passwordArr.splice(val.index + 1, 1)
-				}
-				// 判断是否输入的是.
-				else if (val.keyCode == 190) {
-					// 输入.无效
-				} else {
-					that.passwordArr.push(val.key);
-				}
-				if (val.index == 5) {
-					let pwd_str = that.passwordArr.join('');
-					that.$api.authPaypwd({
-						paypwd:pwd_str
-					},res=>{
-						if(res.status){
-							that.submitJiuBao();
-						}else{
-							that.$common.errorToShow(res.msg)
-						}
-					})
-					return;
-				}
-			},			
-			submitJiuBao(){
-				this.submitStatus = true;
-				// if (!this.rightMobile.status) {
-				// 	this.$common.errorToShow(this.rightMobile.msg);
-				// 	this.submitStatus = false;
-				// 	return;
-				// }
-				// if(!this.balance || this.balance<0){
-				// 	this.$common.errorToShow("请输入酒宝数量");
-				// 	this.submitStatus = false;
-				// 	return;
-				// }
-				// if(this.balance>this.userInfo.balance){
-				// 	this.$common.errorToShow("酒宝不足");
-				// 	this.submitStatus = false;
-				// 	return;
-				// }
 				this.$api.jiubaoGiftApi({
 					mobile:this.mobile,
 					balance:this.balance
@@ -276,8 +177,7 @@
 
 
 .integral-bottom {
-	width: 702rpx;
-	margin: 0 auto;
+	width: 750rpx;
 	overflow: hidden;
 }
 

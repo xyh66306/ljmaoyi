@@ -12,7 +12,6 @@
 					</view>
 					<view class="wallte_info">
 						<view class="txbtn" @click="gotopage('/pages/member/balance/withdraw_cash')">提现</view>
-						<view class="txbtn" @click="gotopage('/pages/member/balance/zyb')">转元宝</view>
 						<view class="zzbtn" @click="gotopage('/pages/member/balance/gift')">红包</view>
 					</view>
 				</view>

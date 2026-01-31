@@ -2,7 +2,7 @@
 	<view>
 		<view class="topArea">
 			<view class="wallteArea">
-				<view class="wallte_tit">钱包酒宝（元）</view>
+				<view class="wallte_tit">钱包余额（元）</view>
 				<view class="wallte_info">
 					<view class="money_nums">{{userInfo.balance}}</view>
 				</view>
@@ -15,10 +15,10 @@
 			<view class='cell-group'>
 				<view class='cell-item user-head'>
 					<view class='cell-item-hd'>
-						<view class='cell-hd-title'>转元宝</view>
+						<view class='cell-hd-title'>转余额</view>
 					</view>
 					<view class='cell-item-bd'>
-						<input class='cell-bd-input' type="number" placeholder='请填写转酒宝数量' v-model="balance"></input>
+						<input class='cell-bd-input' type="number" placeholder='请填写转余额数量' v-model="balance"></input>
 					</view>
 				</view>
 			</view>	
@@ -76,7 +76,7 @@
 			submitJiuBao(){
 				this.submitStatus = true;
 				if(this.balance>this.userInfo.balance){
-					this.$common.errorToShow("酒宝不足");
+					this.$common.errorToShow("余额不足");
 					this.submitStatus = false;
 					return;
 				}

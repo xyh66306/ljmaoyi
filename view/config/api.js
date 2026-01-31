@@ -965,7 +965,7 @@ export const pointDetail = (data, callback) => post('pointmall.detial', data, ca
 //首页
 export const getmyindex = (data, callback) => post('shopindex.index', data, callback);
 
-//元宝
+//余额
 export const getExpLst = (data, callback) => post('exp.getlst', data, callback);
 export const givExp = (data, callback) => post('exp.gift', data, callback);
 
@@ -979,7 +979,7 @@ export const getAddressData = (data, callback) => post('user.getAddressData', da
 //酒宝红包
 export const jiubaoGiftApi = (data, callback) => post('user.gift', data, callback);
 
-//转元宝
+//转余额
 export const zyuanbaoApi = (data, callback) => post('user.btoexp', data, callback);
 
 

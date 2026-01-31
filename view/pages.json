@@ -84,7 +84,7 @@
 		{
 			"path": "pages/member/balance/index",
 			"style": {
-				"navigationBarTitleText": "酒宝"
+				"navigationBarTitleText": "我的余额"
 			}
 		},
 		{
@@ -120,7 +120,7 @@
 		{
 			"path": "pages/member/balance/zyb",
 			"style": {
-				"navigationBarTitleText": "转元宝"
+				"navigationBarTitleText": "转余额"
 			}
 		},
 		{
@@ -228,7 +228,7 @@
 		{
 			"path": "pages/member/integral/index",
 			"style": {
-				"navigationBarTitleText": "我的代金券"
+				"navigationBarTitleText": "我的积分"
 			}
 		},
 		{

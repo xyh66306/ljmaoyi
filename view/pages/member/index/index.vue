@@ -50,6 +50,30 @@
 					<view class="vipbtn">立即续费</view>
 				</view>
 			</view>
+			<view class="ss-money-menu-wrap flex ss-col-center" v-if="hasLogin">
+				<view class="item"  @click="goToPage('/pages/member/balance/index')">
+					<view class="item-txt">{{userInfo.balance || "0.00"}}</view>
+					<view class="item-name">余额</view>
+				</view>			
+				<view class="item" @click="goToPage('/pages/member/integral/index')">
+					<view class="item-txt">{{userInfo.point || "0.00" }}</view>
+					<view class="item-name">积分</view>
+				</view>	
+				<view class="item" v-if="userInfo.area_id>0">
+					<view class="item-txt">5000</view>
+					<view class="item-name">区域销售总额</view>
+				</view>		
+				<view class="item" v-else>
+					<view class="item-txt">0</view>
+					<view class="item-name">优惠券</view>
+				</view>								
+				<view class="item">
+					<view class="item-img">
+						<image src='/static/img/wallet_icon.png'></image>
+					</view>
+					<view class="item-name">我的钱包</view>
+				</view>					
+			</view>			
 			<view class="ss-order-menu-wrap flex ss-col-center">
 				<view class="item"  v-for="(item, index) in orderItems" :key="index" @click="orderNavigateHandle('/pages/member/order/orderlist', item.index)">
 					<view class="item-img order_item-img">
