@@ -308,6 +308,9 @@ class Balance extends Common
         }else{
             $data = $this->where($where)->order($order)->page($page, $limit)->select();
         }
+        echo $this->getLastsql();
+
+
         if(!$data->isEmpty())
         {
             foreach($data as $v)
