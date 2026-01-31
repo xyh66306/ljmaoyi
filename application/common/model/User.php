@@ -704,14 +704,15 @@ class User extends Common
             ->where($where)
             ->count();
 
-        // $UserGrade =  new UserGrade();
-        // $grade = $UserGrade->getAll();
+        $UserGrade =  new UserGrade();
+        $grade = $UserGrade->getAll();
 
         if (!$data->isEmpty()) {
             foreach ($data as $v) {
                 $v['count']  = Db::name('user')->where('sparent_id', 'like', $v['sparent_id'] . '%')->where('id', 'neq', $v['id'])->count();
                 $v['ctime']  = getTime($v['ctime']);
                 $v['nickname']  = empty($v['nickname'])?format_mobile($v['mobile']):$v['nickname'];
+                $v['grade_name'] = $grade[$v['grade'] - 1]['name'];
                 $v['avatar']    = _sImage($v['avatar']);
                 $v['team_value'] = floatval($v['team_value']);
             }
