@@ -147,7 +147,7 @@ class UserFenyong extends Common
                     $this->addDate(1,$fatherInfo['id'],$fatherInfo['grade'],$rate,$order_id,$v['goods_id'],$v['product_id'],$v['payed'],$v['nums'],$profit,$userInfo['id'],$userInfo['grade']);
                 }
                 //添加一个6返1标识
-                $tags = "liuyi".$v['goods_id'];
+                $tags = "liuyi".$v['payed'];
                 Db::name("order_items")->where(['id'=>$v['id']])->update(['is_fenyong'=>1,'tags'=>$tags]);
                 $this->liufanyi($v,$tags);
             }
