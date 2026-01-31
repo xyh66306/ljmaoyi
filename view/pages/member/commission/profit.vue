@@ -4,12 +4,12 @@
 			<view class="bg"></view>
 			<view class="mymoney flex">
 				<view class="allmoney commoney flex">
-					<view class="num">{{ mycendata[0] || 0 }}</view>
-					<view class="txt">总收益</view>
+					<view class="num">{{ mycendata[1] || 0 }}</view>
+					<view class="txt">余额</view>
 				</view>
 				<view class="currmoney commoney flex">
-					<view class="num">{{ mycendata[2] || 0}}</view>
-					<view class="txt">团队消费</view>
+					<view class="num">{{ mycendata[0] || 0}}</view>
+					<view class="txt">总收益</view>
 				</view>				
 			</view>
 		</view>
@@ -51,8 +51,8 @@
 								</view>
 							</view>
 							<view class="profit">
-								<view class="top">酒斗：{{vo.dou}}</view>
-								<view class="btm">元宝：{{vo.exp}}</view>
+								<view class="top">{{vo.money}}</view>
+								<view class="btm">{{vo.type}}</view>
 							</view>
 						</view>											
 					</view>	

@@ -1409,7 +1409,14 @@ class User extends Common
                 ->toArray();
 
             // echo Db::name('user_fenyong')->getlastsql();    
-
+            $typeMap = [
+                1 => "直推奖励",
+                2 => "复购奖励", 
+                3 => "公排奖励",
+                4 => "区代奖励",
+                5 => "市代奖励",
+                6 => "省代奖励"
+            ];
 
             if (!empty($list)) {
                 $result_list = $list;
@@ -1417,15 +1424,7 @@ class User extends Common
                     $result_list[$key]['ctime']         = date('H:i', $v['ctime']);
                     $result_list[$key]['avatar']        = _sImage($v['avatar']);
                     $result_list[$key]['money']         = floatval($v['money']);
-                    if($v['type']==2){
-                        $result_list[$key]['type']          = "分享产品奖励";
-                    } elseif($v['type']==3){
-                        $result_list[$key]['type']          = "合伙人奖励";
-                    } elseif($v['type']==4){
-                        $result_list[$key]['type']          = "代理奖励";
-                    }else {
-                        $result_list[$key]['type']          = "推荐奖励";
-                    }
+                    $result_list[$key]['type'] = isset($v['type']) && array_key_exists($v['type'], $typeMap) ? $typeMap[$v['type']]  : "其他奖励";
                 }
             }
         }

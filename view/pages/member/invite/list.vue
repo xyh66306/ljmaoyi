@@ -8,8 +8,8 @@
 					<view class="txt">直推人数</view>
 				</view>
 				<view class="currmoney commoney flex">
-					<view class="num">{{total.teamcount  || '0' }}</view>
-					<view class="txt">团队数量</view>
+					<view class="num">{{total.today  || '0' }}</view>
+					<view class="txt">今日预估收益</view>
 				</view>				
 			</view>
 		</view>	
