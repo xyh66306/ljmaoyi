@@ -1121,7 +1121,7 @@ class User extends Api
         $page = input('param.page', 1);
         $limit = input('param.limit', config('jshop.page_limit'));
         $userModel = new UserModel();
-        return $userModel->recommendList($this->userId, $page, $limit);
+        return $userModel->recommendNewList($this->userId, $page, $limit);
     }
 
 

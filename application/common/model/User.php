@@ -676,6 +676,59 @@ class User extends Common
         ];
     }
 
+        /**
+     *
+     *  获取用户的推荐列表
+     * @param $user_id
+     * @param $page
+     * @param $limit
+     *
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function recommendNewList($user_id, $page = 1, $limit = 10, $auth = '',$grade='')
+    {
+        $where['pid'] = $user_id;
+
+
+        if ($grade) {
+            $where['grade'] = $grade;
+        }
+
+        $data = $this->field('id,nickname, avatar, mobile, ctime,grade,team_value,sparent_id,auth')
+            ->where($where)
+            ->page($page, $limit)
+            ->order('id desc')
+            ->select();
+
+
+        $count = $this->field('id,nickname, avatar, mobile, ctime,grade,team_value,sparent_id')
+            ->where($where)
+            ->count();
+
+        $UserGrade =  new UserGrade();
+        $grade = $UserGrade->getAll();
+
+        if (!$data->isEmpty()) {
+            foreach ($data as $v) {
+                $v['count']  = Db::name('user')->where('sparent_id', 'like', $v['sparent_id'] . '%')->where('id', 'neq', $v['id'])->count();
+                $v['ctime']  = getTime($v['ctime']);
+                $v['nickname']  = empty($v['nickname'])?format_mobile($v['mobile']):$v['nickname'];
+                $v['avatar']    = _sImage($v['avatar']);
+                $v['team_value'] = floatval($v['team_value']);
+            }
+            $result['data'] = $data;
+        }
+        return $result = [
+            'status' => true,
+            'msg' => '获取成功',
+            'data' => $data,
+            'total' => $count
+        ];
+    }
+
 
     /**
      * 获取用户的积分
