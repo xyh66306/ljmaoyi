@@ -127,14 +127,11 @@ class UserFenyong extends Common
         }
 
         $userGradeLog = new UserGradeLog();
-
-
-
         foreach($order_items as $key => $v) {
 
-
             if($v['goods_cat_id'] == 4 || $v['goods_cat_id'] == 1){
-                if($userInfo['pid'] > 0 ){
+
+               if($userInfo['pid'] > 0 ){
                     $rate = 0;
                     if($fatherInfo['grade'] ==2){
                         $rate = 0.08;
@@ -144,7 +141,8 @@ class UserFenyong extends Common
                     $profit = bcmul($v['payed'], $rate, 2);
                     $this->addDate(1,$fatherInfo['id'],$fatherInfo['grade'],$rate,$order_id,$v['goods_id'],$v['product_id'],$v['payed'],$v['nums'],$profit,$userInfo['id'],$userInfo['grade']);
                 }
-                //添加一个6返1标识
+
+                //添加一个6返1标识       
                 $tags = "liuyi".floatval($v['payed']);
                 Db::name("order_items")->where(['id'=>$v['id']])->update(['is_fenyong'=>1,'tags'=>$tags]);
                 $this->liufanyi($v,$tags);
@@ -172,10 +170,12 @@ class UserFenyong extends Common
         #订单详细
         $orderItemsCount = Db::name('order_items')->alias('a')
             ->join('order c', 'c.order_id = a.order_id', 'LEFT')
-            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.is_gift'=>2,'a.tags'=>$tags,'a.used'=>1])
+            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.tags'=>$tags,'a.used'=>1])
             ->field('a.*, c.user_id,c.ctime')
             ->order("c.ctime asc,a.id asc")
             ->count();
+    
+
         if($orderItemsCount<6){
             return;
         }
@@ -183,7 +183,7 @@ class UserFenyong extends Common
          //受益人
         $shouyierOrderInfo = Db::name('order_items')->alias('a')
             ->join('order c', 'c.order_id = a.order_id', 'LEFT')
-            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.is_gift'=>2,'a.tags'=>$tags,'a.used'=>1])
+            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.tags'=>$tags,'a.used'=>1])
             ->field('a.*, c.user_id,c.ctime')
             ->order("c.ctime asc,a.id asc")
             ->find();      
@@ -193,18 +193,19 @@ class UserFenyong extends Common
         $res = $this->addDate(3,$shouyier['id'],$shouyier['grade'],1,$v['order_id'],$v['goods_id'],$v['product_id'],$v['payed'],1,$v['payed'],$contributer['id'],$contributer['grade']);
         if($res){
 
-            Db::name('order_items')->where(['id'=>$shouyierOrderInfo['id']])->update(['is_fenyong'=>2]);    //收益人订单修改成2
-
             $orderItemsCount = Db::name('order_items')->alias('a')
             ->join('order c', 'c.order_id = a.order_id', 'LEFT')
-            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.is_gift'=>2,'a.tags'=>$tags,'a.used'=>1])
+            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.tags'=>$tags,'a.used'=>1])
             ->field('a.*, c.user_id,c.ctime')
             ->order("c.ctime asc,a.id asc")
             ->select();
             foreach($orderItemsCount as $key=>$val){ 
                 Db::name('order_items')->where(['id'=>$val['id']])->update(['used'=>2]);        //公排订单座位修改成2
             }
+
+            Db::name('order_items')->where(['id'=>$shouyierOrderInfo['id']])->update(['is_fenyong'=>2]);    //收益人订单修改成2
         }
+        return true;
 
     }
 

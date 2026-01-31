@@ -1,4 +1,9 @@
 <?php
+/*
+ * @Author: Xyhao
+ * @Date: 2026-01-22 09:39:11
+ * @Description: 安徽爱喜网络科技有限公司
+ */
 // +----------------------------------------------------------------------
 // | JSHOP [ 小程序 ]
 // +----------------------------------------------------------------------
@@ -42,7 +47,10 @@ class Index extends Base
 
     public function ceshi(){
         $userFenyong = new UserFenyong();
-        $res = $userFenyong->fenyong_grade(340102);
+
+        $order_id = "S01311846366842";
+        $user_id = 2;
+        $res = $userFenyong->fanyong($order_id,$user_id);
         dump($res);
 
     }
