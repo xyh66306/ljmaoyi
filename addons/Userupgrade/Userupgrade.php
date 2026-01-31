@@ -67,7 +67,7 @@ class Userupgrade extends Addons
             return true;
         }
         $userFenyongModel = new UserFenyong();
-        $userFenyongModel->fanyong($order_id,$user_id);
+        $userFenyongModel->fanyong($order_id,$info['user_id']);
         // $payed_money = $this->orderpayedmoney($info['user_id']);
         // $refund_money = $this->orderrefundmoney($info['user_id']);
         // $money = $payed_money - $refund_money;

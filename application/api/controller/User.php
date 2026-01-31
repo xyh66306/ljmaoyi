@@ -1103,8 +1103,9 @@ class User extends Api
         $limit = Request::param('limit', config('jshop.page_limit'));
         $order = Request::param('order', 'ctime desc');
         $type = Request::param('type', 0);
+        $flow = Request::param('flow', 0);
         $balanceModel = new Balance();
-        return $balanceModel->getBalanceList($this->userId, $order, $page, $limit, $type);
+        return $balanceModel->getBalanceList($this->userId, $order, $page, $limit, $type,$flow);
     }
 
 

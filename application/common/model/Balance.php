@@ -287,7 +287,7 @@ class Balance extends Common
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    public function getBalanceList($user_id, $order = '', $page = 1, $limit = 10, $type = 0)
+    public function getBalanceList($user_id, $order = '', $page = 1, $limit = 10, $type = 0,$flow=0)
     {
         $result = [
             'status' => true,
@@ -301,7 +301,13 @@ class Balance extends Common
             $where[] = ['type', 'eq', $type];
         }
         $paymentRelModel = new BillPaymentsRel();
-        $data = $this->where($where)->order($order)->page($page, $limit)->select();
+        if($flow==1){
+            $data = $this->where($where)->where("balance",">",0)->order($order)->page($page, $limit)->select();
+        }elseif($flow==2){
+            $data = $this->where($where)->where("balance","<",0)->order($order)->page($page, $limit)->select();
+        }else{
+            $data = $this->where($where)->order($order)->page($page, $limit)->select();
+        }
         if(!$data->isEmpty())
         {
             foreach($data as $v)
