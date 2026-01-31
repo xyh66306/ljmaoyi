@@ -302,14 +302,12 @@ class Balance extends Common
         }
         $paymentRelModel = new BillPaymentsRel();
         if($flow==1){
-            $data = $this->where($where)->where("balance",">",0)->order($order)->page($page, $limit)->select();
+            $data = $this->where($where)->where("money",">",0)->order($order)->page($page, $limit)->select();
         }elseif($flow==2){
-            $data = $this->where($where)->where("balance","<",0)->order($order)->page($page, $limit)->select();
+            $data = $this->where($where)->where("money","<",0)->order($order)->page($page, $limit)->select();
         }else{
             $data = $this->where($where)->order($order)->page($page, $limit)->select();
         }
-        echo $this->getLastsql();
-
 
         if(!$data->isEmpty())
         {
