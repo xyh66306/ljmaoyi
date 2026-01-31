@@ -174,7 +174,7 @@ class UserFenyong extends Common
         #订单详细
         $orderItemsCount = Db::name('order_items')->alias('a')
             ->join('order c', 'c.order_id = a.order_id', 'LEFT')
-            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.is_gift'=>2,'a.tags'=>$tags,'c.used'=>1])
+            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.is_gift'=>2,'a.tags'=>$tags,'a.used'=>1])
             ->field('a.*, c.user_id,c.ctime')
             ->order("c.ctime asc,a.id asc")
             ->count();
@@ -185,7 +185,7 @@ class UserFenyong extends Common
          //受益人
         $shouyierOrderInfo = Db::name('order_items')->alias('a')
             ->join('order c', 'c.order_id = a.order_id', 'LEFT')
-            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.is_gift'=>2,'a.tags'=>$tags,'c.used'=>1])
+            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.is_gift'=>2,'a.tags'=>$tags,'a.used'=>1])
             ->field('a.*, c.user_id,c.ctime')
             ->order("c.ctime asc,a.id asc")
             ->find();      
@@ -199,7 +199,7 @@ class UserFenyong extends Common
 
             $orderItemsCount = Db::name('order_items')->alias('a')
             ->join('order c', 'c.order_id = a.order_id', 'LEFT')
-            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.is_gift'=>2,'a.tags'=>$tags,'c.used'=>1])
+            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.is_gift'=>2,'a.tags'=>$tags,'a.used'=>1])
             ->field('a.*, c.user_id,c.ctime')
             ->order("c.ctime asc,a.id asc")
             ->select();
