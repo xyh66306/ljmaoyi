@@ -688,16 +688,12 @@ class User extends Common
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    public function recommendNewList($user_id, $page = 1, $limit = 10, $auth = '',$grade='')
+    public function recommendNewList($user_id, $page = 1, $limit = 10)
     {
         $where['pid'] = $user_id;
 
 
-        if ($grade) {
-            $where['grade'] = $grade;
-        }
-
-        $data = $this->field('id,nickname, avatar, mobile, ctime,grade,team_value,sparent_id,auth')
+        $data = $this->field('id,nickname, avatar, mobile, ctime,grade,team_value,sparent_id')
             ->where($where)
             ->page($page, $limit)
             ->order('id desc')
@@ -708,8 +704,8 @@ class User extends Common
             ->where($where)
             ->count();
 
-        $UserGrade =  new UserGrade();
-        $grade = $UserGrade->getAll();
+        // $UserGrade =  new UserGrade();
+        // $grade = $UserGrade->getAll();
 
         if (!$data->isEmpty()) {
             foreach ($data as $v) {
