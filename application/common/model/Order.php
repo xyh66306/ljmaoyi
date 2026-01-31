@@ -937,6 +937,9 @@ class Order extends Common
                 $userPointLog->orderComplete($info['user_id'], $money, $info['order_id']);
             }
             Hook('orderFinish', $id);//订单完成钩子
+
+            $userFenyyongModel = new UserFenyong();
+            $userFenyyongModel->dailiTongji($info['ship_area_id'], $money); //添加代理统计
             //订单记录
             $orderLog = new OrderLog();
             $orderLog->addLog($info['order_id'], $info['user_id'], $orderLog::LOG_TYPE_COMPLETE, '后台订单完成操作', $where);
@@ -1461,9 +1464,6 @@ class Order extends Common
                 //订单记录
                 $orderLog = new OrderLog();
                 $orderLog->addLog($order_id, $user_id, $orderLog::LOG_TYPE_SIGN, "确认收货成功", $where);
-
-                $userFenyyongModel = new UserFenyong();
-                $userFenyyongModel->dailiTongji($info['ship_area_id'],$info['payed']);  //添加代理统计
 
                 $result['status'] = true;
             }
