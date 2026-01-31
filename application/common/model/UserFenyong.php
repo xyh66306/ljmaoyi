@@ -385,8 +385,8 @@ class UserFenyong extends Common
             'contribute_grade'  => $contribute_grade,
             'ctime'             => time(),
         ];
-        $this->insert($data);
-        return $this->id;
+        $insertId = $this->insertGetId($data);
+        return $insertId;
     }
 
 
