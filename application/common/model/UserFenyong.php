@@ -63,12 +63,10 @@ class UserFenyong extends Common
             foreach ($data as $key => $val) {
                 $data[$key]['cust_price']         = bcmul($val['cust_price'],$val['nums'],2);
 
-                $info = Db::name('user')->field("nickname,ident")->where(['id' => $val['receipt_id']])->find();
+                $info = Db::name('user')->field("id,nickname")->where(['id' => $val['receipt_id']])->find();
 
                 $receipt_grade_name = Db::name('user_grade')->where(['id' => $val['receipt_grade']])->value('name');
-                if($info['ident']==1){
-                    $receipt_grade_name = $receipt_grade_name."合伙人";
-                }
+
                 $data[$key]['receipt_grade_name'] = $receipt_grade_name;
 
                 $data[$key]['receipt_name']       = $info['nickname'];
