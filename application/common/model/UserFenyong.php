@@ -446,4 +446,21 @@ class UserFenyong extends Common
 
     }
 
+
+    public function actFenyong($order_id){
+
+        $list = $this->where("order_id",$order_id)->select();
+
+        if(empty($list)){
+            return;
+        }
+        foreach ($list as $key => $val) { 
+            $balanceModel = new Balance();
+            $balanceModel->change($val['receipt_id'],$balanceModel::TYPE_DISTRIBUTION,$val['money']);
+            Db::name("user_fenyong")->where("id",$val['id'])->update(['expire'=>1]);
+        }
+        return true;    
+
+    }
+
 }

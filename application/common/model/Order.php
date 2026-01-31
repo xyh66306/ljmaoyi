@@ -940,6 +940,7 @@ class Order extends Common
 
             $userFenyyongModel = new UserFenyong();
             $userFenyyongModel->dailiTongji($info['ship_area_id'], $money); //添加代理统计
+            $userFenyyongModel->actFenyong($info['order_id']);      //实际分佣
             //订单记录
             $orderLog = new OrderLog();
             $orderLog->addLog($info['order_id'], $info['user_id'], $orderLog::LOG_TYPE_COMPLETE, '后台订单完成操作', $where);
