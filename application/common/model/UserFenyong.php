@@ -108,7 +108,7 @@ class UserFenyong extends Common
         $order_items = Db::name('order_items')->alias('a')
             ->join('order c', 'c.order_id = a.order_id', 'LEFT')
             ->join('goods g', 'g.id = a.goods_id', 'LEFT')
-            ->where(['a.order_id'=>$order_id, 'c.pay_status'=>2, 'c.user_id'=>$user_id])
+            ->where(['a.order_id'=>$order_id, 'c.pay_status'=>2, 'c.user_id'=>$user_id,'a.is_gift'=>2])
             ->where('a.is_fenyong', 0)
             ->field('a.*,c.ship_area_id, c.user_id, c.ctime as create_time,c.pay_status,c.payed,g.goods_cat_id,a.promotion_amount')
             ->select()
@@ -123,39 +123,93 @@ class UserFenyong extends Common
         if(empty($userInfo)){
             return true;
         }
+        $fatherInfo = [];
+        if($userInfo['pid']>0){
+            $fatherInfo = Db::name('user')->where(['id'=>$userInfo['pid']])->find();
+        }
 
+        $userGradeLog = new UserGradeLog();
 
-        // if($userInfo['pid'] == 0){
-        //     return true;
-        // }else{
-        //     //会员升级
-        // }
 
 
         foreach($order_items as $key => $v) {
 
-            if($v['goods_cat_id'] == 1){
-                //套餐产品
-                if($userInfo['pid'] == 0 || $userInfo['grade'] <=1){
-                    continue;
-                }
-                $rate = 0;
-                if($userInfo['grade'] ==2){
-                    $rate = 0.08;
-                }elseif($userInfo['grade'] ==3){
-                    $rate = 0.12;
-                }
-                $profit = bcmul($v['payed'], $rate, 2);
 
-            } else{
-                //产品复购
-                $this->fenyong_grade($userInfo,$v);   //代理返佣
+            if($v['goods_cat_id'] == 4 || $v['goods_cat_id'] == 1){
+                if($userInfo['pid'] > 0 ){
+                    $rate = 0;
+                    if($fatherInfo['grade'] ==2){
+                        $rate = 0.08;
+                    }elseif($fatherInfo['grade'] ==3){
+                        $rate = 0.12;
+                    }
+                    $profit = bcmul($v['payed'], $rate, 2);
+                    $this->addDate(1,$fatherInfo['id'],$fatherInfo['grade'],$rate,$order_id,$v['goods_id'],$v['product_id'],$v['payed'],$v['nums'],$profit,$userInfo['id'],$userInfo['grade']);
+                }
+                //添加一个6返1标识
+                $tags = "liuyi".$v['goods_id'];
+                Db::name("order_items")->where(['id'=>$v['id']])->update(['is_fenyong'=>1,'tags'=>$tags]);
+                $this->liufanyi($v,$tags);
             }
 
+            if($v['goods_cat_id'] == 4){
+                if($userInfo['grade'] == 1 || $v['price'] ==198){
+                    $userGradeLog->authGrade($userInfo['id'],2);
+                }elseif($userInfo['grade'] == 2 || $v['price'] ==1980){
+                    $userGradeLog->authGrade($userInfo['id'],3);
+                }
+            }
         }   
 
     }
     
+    /***
+     * 六单购买返佣
+     * $tags 六返一标识
+     * $is_fenyong 1返佣2跳出
+     * $used 1使用2未使用
+     */
+    public function liufanyi($v,$tags){
+
+        #订单详细
+        $orderItemsCount = Db::name('order_items')->alias('a')
+            ->join('order c', 'c.order_id = a.order_id', 'LEFT')
+            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.is_gift'=>2,'a.tags'=>$tags,'c.used'=>1])
+            ->field('a.*, c.user_id,c.ctime')
+            ->order("c.ctime asc,a.id asc")
+            ->count();
+        if($orderItemsCount<6){
+            return;
+        }
+        $contributer = Db::name('user')->where(['id'=>$v['user_id']])->find();
+         //受益人
+        $shouyierOrderInfo = Db::name('order_items')->alias('a')
+            ->join('order c', 'c.order_id = a.order_id', 'LEFT')
+            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.is_gift'=>2,'a.tags'=>$tags,'c.used'=>1])
+            ->field('a.*, c.user_id,c.ctime')
+            ->order("c.ctime asc,a.id asc")
+            ->find();      
+
+        $shouyier = Db::name('user')->where(['id'=>$shouyierOrderInfo['user_id']])->find();
+
+        $res = $this->addDate(3,$shouyier['id'],$shouyier['grade'],1,$v['order_id'],$v['goods_id'],$v['product_id'],$v['payed'],1,$v['payed'],$contributer['id'],$contributer['grade']);
+        if($res){
+
+            Db::name('order_items')->where(['id'=>$shouyierOrderInfo['id']])->update(['is_fenyong'=>2]);    //收益人订单修改成2
+
+            $orderItemsCount = Db::name('order_items')->alias('a')
+            ->join('order c', 'c.order_id = a.order_id', 'LEFT')
+            ->where(['a.is_fenyong'=>1,'a.is_gift'=>2,'a.is_gift'=>2,'a.tags'=>$tags,'c.used'=>1])
+            ->field('a.*, c.user_id,c.ctime')
+            ->order("c.ctime asc,a.id asc")
+            ->select();
+            foreach($orderItemsCount as $key=>$val){ 
+                Db::name('order_items')->where(['id'=>$val['id']])->update(['used'=>2]);        //公排订单座位修改成2
+            }
+        }
+
+    }
+
 
     /*
     * 代理返佣
@@ -249,6 +303,59 @@ class UserFenyong extends Common
         ];
         $this->insert($data);
         return $this->id;
+    }
+
+
+    /**
+     * 代理统计
+     * $area_id  代理ID
+     * $money  金额
+     */
+    public function dailiTongji($area_id,$money){
+
+        $nianyue = date('Y-m');
+
+        $areaModel = new Area();
+        $areaData = $areaModel->getParents($area_id);
+
+        if(empty($areaData)){
+            return;
+        }
+        $province_id = isset($areaData[0]['id']) ? $areaData[0]['id'] : null;
+        $city_id = isset($areaData[1]['id']) ? $areaData[1]['id'] : null;
+        $district_id = isset($areaData[2]['id']) ? $areaData[2]['id'] : null;
+        if(!$province_id || !$city_id || !$district_id){
+            return;
+        }
+        $this->addDailiTongji($district_id,$nianyue,$money);
+        $this->addDailiTongji($city_id,$nianyue,$money);
+        $this->addDailiTongji($province_id,$nianyue,$money);
+
+    }
+
+    private function addDailiTongji($area_id,$nianyue,$money){ 
+        
+        $info = Db::name("daili_tongji")->where(['area_id'=>$area_id,'nianyue'=>$nianyue])->find();
+        $time = time();
+
+        if($info){
+            $money = bcadd($info['money'],$money,2);
+            $data = [
+                'money'         => $money,
+                'utime'         => $time,
+            ];
+            Db::name("daili_tongji")->where(['id'=>$info['id']])->update($data);
+        }else{
+            $data = [
+                'area_id'       => $area_id,
+                'nianyue'       => $nianyue,
+                'money'         => $money,
+                'ctime'         => $time,
+                'utime'         => $time,
+            ];
+            Db::name("daili_tongji")->insert($data);
+        }
+
     }
 
 }

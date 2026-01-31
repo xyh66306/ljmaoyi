@@ -1,10 +1,10 @@
 <?php
-/**
- * Created by 安徽正一沃古有限公司.
- * User: XYH
- * Date: 2021-07-19
- * Time: 15:41
+/*
+ * @Author: Xyhao
+ * @Date: 2026-01-24 17:57:16
+ * @Description: 安徽爱喜网络科技有限公司
  */
+
 
 namespace app\common\model;
 
@@ -57,112 +57,4 @@ class UserGradeLog extends Common
 
         return true;
     }
-
-    /***
-     * V1 8%
-     * V2 9%
-     * V3 10%
-     * L1 12%
-     * $gradeMoney 会员升级金额
-     */
-    public function rewards($uid,$gradeMoney){
-
-        $userModel               = new  User();
-
-        $userInfo           =  $userModel->get($uid);
-
-        if($userInfo->pid==0){
-            return false;
-        }
-        //获取父亲信息
-        $fatherInfo              = $userModel->get($userInfo->pid);
-        if(empty($fatherInfo)){
-            return false;
-        }
-
-
-        $jiangli = 0;
-        $rate = 0;
-        if($fatherInfo->grade == 2){
-            $rate = 0.07;
-        } elseif($fatherInfo->grade == 3){
-            $rate = 0.08;
-        } elseif($fatherInfo->grade == 4){
-            $rate = 0.9;
-        } elseif($fatherInfo->grade == 5){
-            $rate = 0.10;
-        }
-        $jiangli = $gradeMoney*$rate;
-        if($jiangli>0){
-            $balanceModel = new Balance();
-            $balanceModel->change($fatherInfo->id,$balanceModel::TYPE_SHARERECHARGE,$jiangli,$uid);
-        }
-
-
-        //获取爷爷信息
-        if($fatherInfo->pid==0){
-            return true;
-        }
-        $grandInfo              = $userModel->get($fatherInfo->pid);
-        if(empty($grandInfo)){
-            return true;
-        }
-        if($grandInfo->grade <= $fatherInfo->grade){
-            return true;           
-        }
-
-        $grand_rate = 0;
-        if($grandInfo->grade == 2){
-            $grand_rate = 0.07-$rate;
-        } elseif($grandInfo->grade == 3){
-            $grand_rate = 0.08-$rate;
-        } elseif($grandInfo->grade == 4){
-            $grand_rate = 0.09-$rate;
-        }elseif($fatherInfo->grade == 5){
-            $grand_rate = 0.10-$rate;
-        }
-        if($grand_rate<=0){
-            return true;
-        }
-        $jiangli = $gradeMoney*$grand_rate;
-        if($jiangli>0){
-            $balanceModel->change($grandInfo->id,$balanceModel::TYPE_SHARERECHARGE,$jiangli,$uid);
-        }
-
-
-
-        //获取祖父信息
-        if($grandInfo->pid==0){
-            return true;
-        }
-        $zufuInfo              = $userModel->get($grandInfo->pid);
-        if(empty($zufuInfo)){
-            return true;
-        }
-        if($zufuInfo->grade <= $grandInfo->grade){
-            return true;           
-        }
-
-        $zf_rate = 0;
-        if($zufuInfo->grade == 2){
-            $zf_rate = 0.07-$rate -$grand_rate;
-        } elseif($zufuInfo->grade == 3){
-            $zf_rate = 0.08-$rate  -$grand_rate;
-        } elseif($zufuInfo->grade == 4){
-            $zf_rate = 0.09-$rate   -$grand_rate;
-        }elseif($zufuInfo->grade == 5){
-            $zf_rate = 0.10-$rate - $grand_rate;
-        }
-        if($zf_rate<=0){
-            return true;
-        }
-        $jiangli = $gradeMoney*$zf_rate;
-        if($jiangli>0){
-            $balanceModel->change($zufuInfo->id,$balanceModel::TYPE_SHARERECHARGE,$jiangli,$uid);
-        }        
-
-        return true;
-    }
-
-
 }

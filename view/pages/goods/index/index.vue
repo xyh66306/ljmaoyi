@@ -103,7 +103,7 @@
 						<text class='cell-bd-text color-6 fsz24'>{{ goodsInfo.brief || '' }}</text>
 					</view>
 				</view>
-				<view class='cell-item goods-title-item cell-item-mid'>
+				<view class='cell-item goods-title-item cell-item-mid' v-if="goodsInfo.goods_cat_id !=4">
 					<view class='cell-item-hd'>
 						<view class='cell-hd-title'>配送</view>
 					</view>
@@ -243,49 +243,55 @@
 		<div id="qrCode" ref="qrCodeDiv"></div>
 		<!-- 底部按钮 -->
 		<view class="goods-bottom">	
-			<!-- 客服按钮 -->
-			<!-- #ifdef H5 || APP-PLUS-NVUE || APP-PLUS -->
-			<view class="goods-bottom-ic" @click="showChat()">
-				<image class="icon" src="/static/image/customerservice.png" mode=""></image>
-				<view>客服</view>
-			</view>
-			<!-- #endif -->
-			<!-- #ifdef MP-WEIXIN -->
-			<button class="goods-bottom-ic weiContact" hover-class="none" open-type="contact" bindcontact="showChat"
-			 :session-from="kefupara">
-				<image class="icon" src="/static/image/customerservice.png" mode=""></image>
-				<view>客服</view>
-			</button>
-			<!-- #endif -->
-			<!-- #ifdef MP-ALIPAY -->
-			<contact-button class="goods-bottom-ic icon" icon="/static/image/customerservice.png" size="80rpx*80rpx" tnt-inst-id="WKPKUZXG"
-			 scene="SCE00040186" hover-class="none" />
-			<!-- #endif -->
-			<!-- #ifdef MP-TOUTIAO -->
-			<view class="goods-bottom-ic" @click="showChat()">
-				<image class="icon" src="/static/image/customerservice.png" mode=""></image>
-				<view>客服</view>
-			</view>
-			<!-- #endif -->
+			<block v-if="goodsInfo.goods_cat_id !=4">
+				<!-- 客服按钮 -->
+				<!-- #ifdef H5 || APP-PLUS-NVUE || APP-PLUS -->
+				<view class="goods-bottom-ic" @click="showChat()">
+					<image class="icon" src="/static/image/customerservice.png" mode=""></image>
+					<view>客服</view>
+				</view>
+				<!-- #endif -->
+				<!-- #ifdef MP-WEIXIN -->
+				<button class="goods-bottom-ic weiContact" hover-class="none" open-type="contact" bindcontact="showChat"
+				 :session-from="kefupara">
+					<image class="icon" src="/static/image/customerservice.png" mode=""></image>
+					<view>客服</view>
+				</button>
+				<!-- #endif -->
+				<!-- #ifdef MP-ALIPAY -->
+				<contact-button class="goods-bottom-ic icon" icon="/static/image/customerservice.png" size="80rpx*80rpx" tnt-inst-id="WKPKUZXG"
+				 scene="SCE00040186" hover-class="none" />
+				<!-- #endif -->
+				<!-- #ifdef MP-TOUTIAO -->
+				<view class="goods-bottom-ic" @click="showChat()">
+					<image class="icon" src="/static/image/customerservice.png" mode=""></image>
+					<view>客服</view>
+				</view>
+				<!-- #endif -->
 
-			<view class="goods-bottom-ic" @click="redirectCart">
-				<view class="badge color-f" v-if="cartNums">{{ cartNums || ''}}</view>
-				<image class="icon" src="/static/image/ic-me-car.png" mode=""></image>
-				<view>购物车</view>
-			</view>
+				<view class="goods-bottom-ic" @click="redirectCart">
+					<view class="badge color-f" v-if="cartNums">{{ cartNums || ''}}</view>
+					<image class="icon" src="/static/image/ic-me-car.png" mode=""></image>
+					<view>购物车</view>
+				</view>
 
-			<view class="goods-bottom-ic" @click="collection">
-				<image class="icon" :src="isfav ? favLogo[1] : favLogo[0]" mode=""></image>
-				<view v-if="!isfav">收藏</view>
-				<view v-if="isfav">已收藏</view>
-			</view>
-			
-			<block v-if="goodsInfo.goods_cat_id==1">
-				<button class='btn btn-square btn-b' @click="toshow(3)" hover-class="btn-hover2" style="width: 58%;">立即购买</button>
-			</block>
+				<view class="goods-bottom-ic" @click="collection">
+					<image class="icon" :src="isfav ? favLogo[1] : favLogo[0]" mode=""></image>
+					<view v-if="!isfav">收藏</view>
+					<view v-if="isfav">已收藏</view>
+				</view>
+				
+				<block v-if="goodsInfo.goods_cat_id==1">
+					<button class='btn btn-square btn-b' v-if="userInfo.grade>=2" @click="toshow(3)" hover-class="btn-hover2" style="width: 58%;">立即购买</button>
+					<button class='btn btn-square btn-b btn-hover2' v-else  style="width: 58%;">VIP专属</button>
+				</block>
+				<block v-else>
+					<button class='btn btn-square btn-g' @click="toshow(1)" hover-class="btn-hover2" style="width: 30%;">加入购物车</button>
+					<button class='btn btn-square btn-b' @click="toshow(2)" hover-class="btn-hover2" style="width: 28%;">立即购买</button>
+				</block>
+				</block>
 			<block v-else>
-				<button class='btn btn-square btn-g' @click="toshow(1)" hover-class="btn-hover2" style="width: 30%;">加入购物车</button>
-				<button class='btn btn-square btn-b' @click="toshow(2)" hover-class="btn-hover2" style="width: 28%;">立即购买</button>
+				<button class='btn btn-square btn-b' @click="toshow(2)" hover-class="btn-hover2" style="width:100%;">立即购买</button>
 			</block>			
 		</view>
 

@@ -223,14 +223,33 @@ export default {
 			this.goodsDetail(id);
 		},
 		goPay(){
-			let goodsId = 0
 			if(this.index==0){
-				goodsId = 4
+				this.buyNow(4);
 			}else if(this.index==1){
-				goodsId = 5
+				this.buyNow(5);
 			}
-			this.$common.navigateTo("/pages/goods/index/index?id="+goodsId)
+			// this.$common.navigateTo("/pages/goods/index/index?id="+goodsId)
 		},
+		// 立即购买
+		buyNow(productId) {
+			
+			let data = {
+				product_id: productId,
+				nums: 1,
+				type: 2 // 区分加入购物车和购买
+			}
+
+			this.$api.addCart(data, res => {				
+				if (res.status) {
+					let cartIds = res.data;
+					this.$common.navigateTo('/pages/goods/place-order/index?exp=1&cart_ids=' + JSON.stringify(cartIds));							
+				} else {
+					this.$common.errorToShow(res.msg);
+				}
+			}, res => {
+				this.submitStatus = false;
+			})
+		},			
 		tabClick(index){
 			if(this.index !=index){
 				this.index = index

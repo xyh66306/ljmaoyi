@@ -60,7 +60,7 @@
 					<view class="item-name">积分</view>
 				</view>	
 				<view class="item" v-if="userInfo.area_id>0">
-					<view class="item-txt">5000</view>
+					<view class="item-txt">{{userInfo.quyu}}</view>
 					<view class="item-name">区域销售总额</view>
 				</view>		
 				<view class="item" v-else>
