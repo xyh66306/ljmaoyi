@@ -1511,7 +1511,7 @@ class User extends Common
                 $userData['avatar'] = $data['avatar'];
             } else {
                 $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-                $userData['avatar'] = "ac66b4d299d193eab1a255b9339ba752";
+                $userData['avatar'] = "c7ec48b5e062c88253ed409c414c3c60";
             }
             if (isset($data['nickname'])) {
                 $userData['nickname'] = $data['nickname'];
