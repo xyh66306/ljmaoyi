@@ -36,6 +36,7 @@ use app\common\model\UserBankcards;
 use app\common\model\GoodsCollection;
 use app\common\model\User as UserModel;
 use think\Db;
+use org\Wx;
 
 
 /**
@@ -1731,5 +1732,33 @@ class User extends Api
         }
         return $return_data;
     }    
+
+    public function yjLogin(){
+
+        $result = [
+            'status' => false,
+            'data' => [],
+            'msg' => ''
+        ];
+        $code = input("code","");
+        $invicode = input("invicode","");
+        $open_id = input("open_id","");
+        if(empty($code) || empty($open_id)){
+            $result['msg'] = '参数错误';
+            return $result;
+        }
+        $wxModel = new Wx();
+        $phone = $wxModel->getPhoneNums($code);
+        if(!$phone){
+            return $result;
+        }
+        $userModel = new UserModel();
+        $data['mobile'] = $phone;
+        $data['invitecode'] = $invicode;
+        $data['wx_id'] = $open_id;
+        $platform = 1;
+        return $userModel->phoneLogin($data, 2, $platform);
+
+    }     
 
 }

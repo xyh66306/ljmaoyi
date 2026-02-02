@@ -294,7 +294,11 @@ return [
             'pointranking'=>[
                 'code'=>'pointRanking',
                 'is_login'=>true,
-            ]
+            ],
+            'yjLogin'=> [
+                'code'     => 'yjLogin',
+                'is_login' => false
+            ],            
         ]
     ],
 

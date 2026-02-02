@@ -1463,6 +1463,123 @@ class User extends Common
         $return_data['status'] = true;
 
         return $return_data;
+    }   
+    
+    
+    /**
+     * 手机短信验证码登陆，同时兼有手机短信注册的功能，还有第三方账户绑定的功能
+     * @param $data
+     * @param int $loginType 登陆类型，1网页登陆，存session，2接口登陆，返回token
+     * @param int $platform
+     * @return array
+     */
+    public function phoneLogin($data, $loginType = 1, $platform = 1)
+    {
+        if (!isset($data['mobile'])) {
+            return error_code(11051);
+        }
+
+
+        //判断是否是用户名登陆
+        $smsModel    = new Sms();
+        $userWxModel = new UserWx();
+
+
+        $userInfo = $this->where(array('mobile' => $data['mobile']))->find();
+        if (!$userInfo) {
+            //没有此用户，创建此用户
+            $userData['mobile'] = $data['mobile'];
+
+            //判断是否是小程序里的微信登陆，如果是，就查出来记录，取他的头像和昵称
+            if (isset($data['wx_id'])) {
+                $user_wx_info = $userWxModel->where(['id' => $data['wx_id']])->find();
+                if ($user_wx_info) {
+                    if (!isset($data['avatar'])) {
+                        $data['avatar'] = $user_wx_info['avatar'];
+                    }
+                    if (!isset($data['nickname'])) {
+                        $data['nickname'] = $user_wx_info['nickname'];
+                    }
+                    //取性别
+                    if (!isset($data['sex'])) {
+                        $uData['sex'] = $user_wx_info['gender'] == 0 ? 3 : $user_wx_info['gender'];
+                    }
+                }
+            }
+            //如果没有头像和昵称，那么就取系统头像和昵称吧
+            if (isset($data['avatar'])) {
+                $userData['avatar'] = $data['avatar'];
+            } else {
+                $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+                $userData['avatar'] = "ac66b4d299d193eab1a255b9339ba752";
+            }
+            if (isset($data['nickname'])) {
+                $userData['nickname'] = $data['nickname'];
+            } else {
+                $userData['nickname'] = $userData['username'] = format_mobile($data['mobile']);
+            }
+            if (isset($data['invitecode']) && $data['invitecode']) {
+                $pid   = $this->getUserIdByShareCode($data['invitecode']);
+                $pinfo = model('common/User')->where(['id' => $pid])->find();
+                if ($pinfo) {
+                    $userData['pid'] = $pid;
+                } else {
+                    $userData['pid'] = 0;
+                }
+            }
+
+            $userData['ctime'] = time();
+            if (isset($data['password'])) {
+                //判断密码是否符合要求
+                if (!isset($data['password'][5]) || isset($data['password'][16])) {
+                    return error_code(11009);
+                }
+                $userData['password'] = $this->enPassword($data['password'], $userData['ctime']);
+            } else {
+                $userData['password'] = "";
+            }
+
+            //取默认的用户等级
+            $userGradeModel = new UserGrade();
+            $userGradeInfo  = $userGradeModel->where('is_def', $userGradeModel::IS_DEF_YES)->find();
+            if ($userGradeInfo) {
+                $userData['grade'] = $userGradeInfo['id'];
+            }
+
+
+            $user_id = $this->insertGetId($userData);
+            if (!$user_id) {
+                return error_code(10019);
+            }
+            $userInfo = $this->where(array('id' => $user_id))->find();
+            hook('newuserreg', $userInfo);
+            hook("adminmessage",array('user_id'=>$user_id,"code"=>"user_register","params"=>$userInfo));
+            #@Fdw 用户注册后添加邀请记录dwF
+            hook('addUserInviteLog', [
+                'user_id' => $userInfo['id'],
+                'parent_id' => empty($pid) ? 0 : $pid,
+            ]);
+
+
+        } else {
+            //如果有这个账号的话，判断一下是不是传密码了，如果传密码了，就是注册，这里就有问题，因为已经注册过
+            if (isset($data['password'])) {
+                return error_code(11019);
+            }
+        }
+        //判断是否是小程序里的微信登陆，如果是，就给他绑定微信账号
+        if (isset($data['wx_id'])) {
+            $userWxModel->save(['user_id' => $userInfo['id']], ['id' => $data['wx_id']]);
+        }
+
+        if ($userInfo['status'] == self::STATUS_NORMAL) {
+            $result = $this->setSession($userInfo, $loginType, $platform);            //根据登陆类型，去存session，或者是返回user_token
+        } else {
+            return error_code(11022);
+        }
+
+        return $result;
     }    
+
 
 }
