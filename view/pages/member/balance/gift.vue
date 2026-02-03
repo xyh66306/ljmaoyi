@@ -97,20 +97,27 @@
 					return;
 				}
 				if(!this.balance || this.balance<0){
-					this.$common.errorToShow("请输入酒宝数量");
+					this.$common.errorToShow("请输入余额数量");
 					this.submitStatus = false;
 					return;
 				}
-				if(this.balance>this.userInfo.balance){
-					this.$common.errorToShow("酒宝不足");
+				const balanceNum = parseFloat(this.balance);
+				const userInfoBalance = parseFloat(this.userInfo.balance);
+				if (isNaN(balanceNum)) {
+					this.$common.errorToShow("请输入有效的余额数量");
+					this.submitStatus = false;
+					return;
+				}
+				
+				if (balanceNum > userInfoBalance) {
+					this.$common.errorToShow("余额不足");
 					this.submitStatus = false;
 					return;
 				}
 				this.$api.jiubaoGiftApi({
 					mobile:this.mobile,
-					balance:this.balance
+					balance:balanceNum
 				},res=>{
-					this.closePayUp();
 					this.submitStatus = false;
 					this.$common.errorToShow(res.msg)
 				})

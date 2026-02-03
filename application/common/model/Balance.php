@@ -81,7 +81,7 @@ class Balance extends Common
                 $money = abs($money);
             }
             //如果是减余额的操作，还是加余额操作
-            if($type == self::TYPE_PAY || /* $type == self::TYPE_REFUND || //退款是往账户上加钱的 */$type == self::TYPE_TOCASH)
+            if($type == self::TYPE_PAY || /* $type == self::TYPE_REFUND || //退款是往账户上加钱的 */$type == self::TYPE_TOCASH || $type == self::TYPE_GIFTOUT)
             {
                 $money = - $money - $cate_money;
             }
