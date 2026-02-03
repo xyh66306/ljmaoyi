@@ -125,6 +125,8 @@ class Balance extends Common
             'data' => [],
             'msg' => ''
         ];
+        $nickname = '';
+        $userModel = new User();    
 
         switch($type)
         {
