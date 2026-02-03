@@ -89,11 +89,17 @@
 					</view>
 					<view class="item-name">{{ item.name }}</view>
 				</view>
+				<view class="item" @click="createPoster()">
+					<view class="item-img">
+						<image src='/static/img/pow_13.png'></image>
+					</view>
+					<view class="item-name">分享好友</view>
+				</view>				
 				<view class="item">
 					<view class="item-img">
 						<image src='/static/img/pow_07.png'></image>
 					</view>
-					<view class="item-name">联系客服</view>
+					<view class="item-name">群分享</view>
 				</view>				
 			</view>
 		</view>

@@ -176,7 +176,7 @@ class UserFenyong extends Common
             ->count();
     
 
-        if($orderItemsCount<6){
+        if($orderItemsCount<7){
             return;
         }
         $contributer = Db::name('user')->where(['id'=>$v['user_id']])->find();

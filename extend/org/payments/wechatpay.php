@@ -794,4 +794,14 @@ class wechatpay implements Payment
         $result_arr = json_decode($result['data'],true);
         return $result_arr;
     }
+
+
+    /**
+     * 预支付交易会话标识(prepay_id)
+     */
+    public static function prepayId($order,$config)
+    { 
+
+        $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
+    }
 }
