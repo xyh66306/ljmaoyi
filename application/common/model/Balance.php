@@ -155,7 +155,15 @@ class Balance extends Common
                 break;   
             case self::TYPE_GONGPAI:
                 $result['data'] = '公排奖励'. $money . '元';
-                break;                 
+                break;     
+            case self::TYPE_GIFTOUT:
+                $nickname = $userModel->where([ 'id' => $source_id ])->value('nickname');
+                $result['data'] = $nickname.'转赠赠送'. $money . '元';
+                break;   
+            case self::TYPE_GIFTIN:
+                $nickname = $userModel->where([ 'id' => $source_id ])->value('nickname');
+                $result['data'] = $nickname.'转赠获取'. $money . '元';
+                break;                             
             default:
                 return error_code(10000);
         }
