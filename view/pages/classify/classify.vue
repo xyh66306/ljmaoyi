@@ -194,10 +194,6 @@
 					}
 				}
 			}
-			
-
-			this.getCartNum()
-
 		},
 		computed: {
 			cate_style() {
@@ -205,14 +201,6 @@
 			},
 			defaultSpesDesc() {
 				return this.product.default_spes_desc;
-			},
-		},
-		watch: {
-			'$store.state.cartNum': function(newVal) {
-				uni.setTabBarBadge({
-					index: 3,
-					text: newVal.toString()
-				})
 			},
 		},
 		methods: {
@@ -436,7 +424,6 @@
 					this.$api.fastadd(data, res => {
 						if (res.status) {
 							this.$common.successToShow(res.msg);
-							this.getCartNum();//获取购物车数量
 							this.toclose()
 						} else {
 							this.$common.errorToShow(res.msg);
@@ -562,17 +549,6 @@
 					_this.getGoods();
 				}
 			},
-
-			// 获取购物车数量
-			getCartNum() {
-				if (this.$db.get('userToken')) {
-					this.$api.getCartNum({}, res => {
-						if (res.status) {
-							this.$store.commit('cartNum', res.data)
-						}
-					})
-				}
-			},
 			//快速购买加入购物车
 			clickHandleFastAdd(addCartData){
 				let data = {}
@@ -584,7 +560,6 @@
 				this.$api.fastadd(data, res => {
 					if (res.status) {
 						this.$common.successToShow(res.msg);
-						this.getCartNum();//获取购物车数量
 						this.toclose()
 					} else {
 						this.$common.errorToShow(res.msg);
@@ -594,16 +569,15 @@
 		},
 		onLoad(option) {
 			this.categories();
-			this.getBanner();
-			if (option.id) {
-				this.selectId = option.id
-			}
-			uni.startPullDownRefresh(); //自动下拉刷新库存
+			// this.getBanner();
+			// if (option.id) {
+			// 	this.selectId = option.id
+			// }
+			// uni.startPullDownRefresh(); //自动下拉刷新库存
 		},
 
 		onPullDownRefresh() {
 			this.categories()
-			this.getCartNum()
 			uni.stopPullDownRefresh()
 		}
 	};
