@@ -298,7 +298,11 @@ return [
             'yjLogin'=> [
                 'code'     => 'yjLogin',
                 'is_login' => false
-            ],            
+            ],  
+            'gift'     => [
+                'code'     => 'gift',
+                'is_login' => true,
+            ],                           
         ]
     ],
 

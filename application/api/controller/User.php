@@ -1761,4 +1761,99 @@ class User extends Api
 
     }     
 
+    /**
+     * 转账余额
+     */
+    public function gift(){
+
+        $result = [
+            'status' => false,
+            'data' => [],
+            'msg' => ''
+        ];
+
+        $mobile = Request::param('mobile',false); //转赠手机号
+        $balance = Request::param('balance',false);
+
+        if(!$mobile){
+            $result['msg'] = '请输入手机号';
+            return  $result;
+        }
+        if(!$balance){
+            $result['msg'] = '请输入转账数量';
+            return  $result;
+        }
+
+
+        // $yushu = $balance % 10;
+
+        // if($yushu>0){
+        //     $result['msg'] = '必须是10的倍数';
+        //     return  $result;
+        // }
+
+
+        //验证转账手机号
+        $userModel = new UserModel();
+        $toInfo = $userModel->where('mobile',$mobile)->find();
+        if(!$toInfo){
+            $result['msg'] = '对方手机号不存在';
+            return  $result;
+        }
+        if($toInfo['id'] == $this->userId){
+            $result['msg'] = '不能转给自己';
+            return  $result;
+        }
+        if($balance <= 0){
+            $result['msg'] = '请输入正确的余额数量';
+            return  $result;
+        }
+        $userInfo = $userModel->where('id',$this->userId)->find();
+
+
+        if($balance > $userInfo['balance']){
+            $result['msg'] = '余额不足';
+            return  $result;
+        }
+
+        // $sparent_id = $userInfo['sparent_id'];
+
+        // if(strpos($toInfo['sparent_id'], $sparent_id) === false){
+        //     $result['msg'] = '必须是团队下级才能转';
+        //     return  $result;
+        // }
+
+
+        $balanceModel = new Balance();
+
+        // 启动事务
+        Db::startTrans();
+        try {
+            // 转出元宝
+            $res = $balanceModel->change($this->userId, $balanceModel::TYPE_GIFTOUT,$balance,$toInfo['id']);
+
+            // 转入元宝
+            $res1 = $balanceModel->change($toInfo['id'], $balanceModel::TYPE_GIFTIN, $balance,$this->userId);
+
+            if($res['status'] && $res1['status']){
+                // 提交事务
+                Db::commit();
+                $result['status'] = true;
+                $result['msg'] = '转账成功';
+            } else {
+                // 回滚事务
+                Db::rollback();
+                $result['status'] = false;
+                $result['msg'] = '转账失败';
+            }
+        } catch (\Exception $e) {
+            // 回滚事务
+            Db::rollback();
+            $result['status'] = false;
+            $result['msg'] =  $e->getMessage();
+        }
+
+        return $result;
+    }    
+
 }

@@ -24,6 +24,9 @@ class Balance extends Common
     const TYPE_QUYUE = 9;               //区域分红奖励
     const TYPE_GONGPAI = 10;              //公排奖励
 
+    const TYPE_GIFTIN       = 11;  //转账收入
+    const TYPE_GIFTOUT      = 12;  //转账支出
+
     /**
      * 充值
      */
