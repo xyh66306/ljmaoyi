@@ -120,6 +120,7 @@
 				},res=>{
 					this.submitStatus = false;
 					this.$common.errorToShow(res.msg)
+					uni.navigateTo()
 				})
 			}
 		}		

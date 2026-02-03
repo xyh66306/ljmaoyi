@@ -5,7 +5,6 @@ use app\common\model\PintuanGoods;
 use app\common\model\PintuanRule;
 use app\common\model\Promotion;
 use app\common\model\PromotionResult;
-use think\facade\Request;
 
 /**
  * Class PosterShare
@@ -17,44 +16,44 @@ class PosterShare extends QrShare implements BaseShare
     private $c = [
         'page_1' => [
             //首页
-            'poster_w' => 400,
-            'poster_h' => 600,
+            'poster_w' => 750,
+            'poster_h' => 1334,
             'poster_bcolor' =>[255,255,255],
             'word' => [
                 [
                     'string' => '推荐码',
-                    'dst_x' => 140,
-                    'dst_y' => 550,
+                    'dst_x' => 280,
+                    'dst_y' => 1044,
                     'width' => 260,
                     'max_line' => 1,
-                    'color' => [255,255,255],
-                    'size' => 18,
+                    'color' => [249, 142, 70],
+                    'size' => 24,
                 ],
                 [
                     'string' => '推荐码',
-                    'dst_x' => 141,
-                    'dst_y' => 550,
+                    'dst_x' => 250,
+                    'dst_y' => 1154,
                     'width' => 260,
                     'max_line' => 1,
-                    'color' => [255,255,255],
-                    'size' => 18,
+                    'color' => [249, 142, 70],
+                    'size' => 70,
                 ],
             ],
             'image' => [
                 [
-                    'src' => './static/images/share.png',
+                    'src' => './static/img/share/bg.png',
                     'dst_x' => 0,
                     'dst_y' => 0,
-                    'dst_w' => 400,
-                    'dst_h' => 600,
+                    'dst_w' => 750,
+                    'dst_h' => 1334,
                     'radius' => 0
                 ],
                 [
                     'src' => '二维码-data2里动态设置',
-                    'dst_x' => 50,
-                    'dst_y' => 50,
-                    'dst_w' => 300,
-                    'dst_h' => 300,
+                    'dst_x' => 125,
+                    'dst_y' => 390,
+                    'dst_w' => 500,
+                    'dst_h' => 500,
                     'radius' => 0
                 ],
             ]
@@ -362,7 +361,6 @@ class PosterShare extends QrShare implements BaseShare
                 return $re;
             }
             $qr_re = $this->getQr($url, $code, $client);
-
             if (!$qr_re['status']) {
                 return $qr_re;
             }
@@ -385,10 +383,10 @@ class PosterShare extends QrShare implements BaseShare
      */
     private function mark($data, $url, $filename)
     {
-
         $folder = "static".DS."poster";
         is_dir("static/poster/") OR mkdir($folder, 0777, true);
         $file_url = $folder.DS.$filename.".png";
+
         if (!isset($this->c['page_'.$data['page']])) {
             return false;
         }
@@ -404,7 +402,6 @@ class PosterShare extends QrShare implements BaseShare
             $this->c['page_'.$data['page']]['poster_bcolor'][2]
         );
         imagefill($poster, 0, 0, $back_color);
-
         switch ($data['page']) {
             case 1:
                 $this->data1($data, $url);
@@ -436,7 +433,6 @@ class PosterShare extends QrShare implements BaseShare
             default:
                 return false;
         }
-
         //添加图片
         foreach ($this->c['page_'.$data['page']]['image'] as $image) {
             $this->addimg(
@@ -476,8 +472,8 @@ class PosterShare extends QrShare implements BaseShare
     {
         $this->c['page_1']['image'][1]['src'] = $url;
         if (isset($data['userShareCode']) && $data['userShareCode'] != "") {
-            $this->c['page_1']['word'][0]['string'] = "邀请码:".$data['userShareCode'];
-            $this->c['page_1']['word'][1]['string'] = "邀请码:".$data['userShareCode'];
+            $this->c['page_1']['word'][0]['string'] = "我的邀请码";
+            $this->c['page_1']['word'][1]['string'] = $data['userShareCode'];
         } else {
             unset($this->c['page_1']['word'][0]);
             unset($this->c['page_1']['word'][1]);

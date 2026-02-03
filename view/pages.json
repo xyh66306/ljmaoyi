@@ -123,28 +123,28 @@
 				"navigationBarTitleText": "转余额"
 			}
 		},
-		{
-			"path": "pages/member/dou/index",
-			"style": {
-				"navigationBarTitleText": "酒豆"
-			}
-		},
-		{
-			"path": "pages/member/dou/zyb",
-			"style": {
-				"navigationBarTitleText": "酒豆转元宝"
-			}
-		},
-		{
-			"path": "pages/member/dou/zjb",
-			"style": {
-				"navigationBarTitleText": "酒豆转酒宝"
-			}
-		},
+		// {
+		// 	"path": "pages/member/dou/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "酒豆"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/member/dou/zyb",
+		// 	"style": {
+		// 		"navigationBarTitleText": "酒豆转元宝"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/member/dou/zjb",
+		// 	"style": {
+		// 		"navigationBarTitleText": "酒豆转酒宝"
+		// 	}
+		// },
 		{
 			"path": "pages/member/balance/details",
 			"style": {
-				"navigationBarTitleText": "酒宝明细"
+				"navigationBarTitleText": "余额明细"
 			}
 		},
 		{
@@ -314,12 +314,12 @@
 				"navigationBarTitleText": "订单详情"
 			}
 		},
-		{
-			"path": "pages/member/order/invitation_group",
-			"style": {
-				"navigationBarTitleText": "邀请拼单"
-			}
-		},
+		// {
+		// 	"path": "pages/member/order/invitation_group",
+		// 	"style": {
+		// 		"navigationBarTitleText": "邀请拼单"
+		// 	}
+		// },
 		{
 			"path": "pages/member/after_sale/index",
 			"style": {
@@ -450,7 +450,7 @@
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "中健昊天",
+		"navigationBarTitleText": "月亮姐姐-灵境集",
 		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#F8F8F8"
 	},
@@ -458,12 +458,19 @@
 		"color": "#999",
 		"selectedColor": "#fda14a",
 		"backgroundColor": "#fff",
-		"list": [{
+		"list": [
+			{
 				"pagePath": "pages/index/index",
 				"text": "首页",
 				"iconPath": "static/images/index_gray.png",
 				"selectedIconPath": "static/images/index_black.png"
 			},
+			{
+				"pagePath": "pages/classify/classify",
+				"text": "分类",
+				"iconPath": "static/images/classify_gray.png",
+				"selectedIconPath": "static/images/classify_black.png"
+			},			
 			{
 				"pagePath": "pages/cart/index/index",
 				"text": "购物车",

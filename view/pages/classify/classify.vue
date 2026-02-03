@@ -569,16 +569,7 @@
 					this.$api.getCartNum({}, res => {
 						if (res.status) {
 							this.$store.commit('cartNum', res.data)
-							uni.setTabBarBadge({
-								index: 3,
-								text: res.data.toString()
-							})
 						}
-					})
-				} else {
-					uni.setTabBarBadge({
-						index: 3,
-						text: '0'
 					})
 				}
 			},

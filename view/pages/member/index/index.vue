@@ -168,6 +168,13 @@
 						unshowItem: false,
 						nums: 0
 					},
+					tixian: {
+						name: '收益',
+						icon: '/static/img/pow_12.png',
+						router: '/pages/member/commission/profit',
+						unshowItem: false,
+						nums: 0
+					},						
 					balance: {
 						name: '充值',
 						icon: '/static/img/pow_02.png',
@@ -179,13 +186,6 @@
 						name: '设置',
 						icon: '/static/img/pow_03.png',
 						router: '/pages/member/setting/index',
-						unshowItem: false,
-						nums: 0
-					},	
-					tixian: {
-						name: '收益',
-						icon: '/static/img/pow_12.png',
-						router: '/pages/member/commission/profit',
 						unshowItem: false,
 						nums: 0
 					},		
@@ -584,8 +584,8 @@ image {
 			}
 		}
 		.ewm {
-			width:36rpx;
-			height:36rpx;
+			width:45rpx;
+			height:45rpx;
 			margin-left:auto;
 			margin-right: 20rpx;
 		}
