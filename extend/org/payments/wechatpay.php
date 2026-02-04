@@ -809,12 +809,18 @@ class wechatpay implements Payment
         if(!$openid_re['status']){
             return $openid_re;
         }  
+        //取appid
+        $appid_re = $this->getAppid("JSAPI");
+        if(!$appid_re['status']){
+            return $appid_re;
+        }
+
         $open_id = $openid_re['data'];    
         
-        dump($open_id);
+        dump($order);
         
         $data = [
-            'appid' => $this->config['app_id'],//公众号ID
+            'appid' => $appid_re['data'],       //appid
             'mchid' => $this->config['mch_id'],//商户号
             'description' => $order['goods_name'],//商品描述
             'out_trade_no' => $order['order_id'],//商户订单号
