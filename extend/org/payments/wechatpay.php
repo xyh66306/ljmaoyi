@@ -817,17 +817,16 @@ class wechatpay implements Payment
 
         $open_id = $openid_re['data'];    
         
-        dump($order);
         
         $data = [
             'appid' => $appid_re['data'],       //appid
             'mchid' => $this->config['mch_id'],//商户号
-            'description' => $order['goods_name'],//商品描述
-            'out_trade_no' => $order['order_id'],//商户订单号
+            'description' => $order['pay_title'],//商品描述
+            'out_trade_no' => $order['payment_id'],//商户订单号
             'time_expire' => date('Y-m-d H:i:s',time()+3600),//订单失效时间
-            'notify_url' => url('b2c/Callback/transactions',['code'=>'wechatpay','order_id'=>$order['order_id']],'html',true),
+            'notify_url' => url('b2c/Callback/transactions',['code'=>'wechatpay','payment_id'=>$order['payment_id']],'html',true),
             "amount"=>[
-                "total"=>$order['payed'],
+                "total"=>$order['money'],
                 "currency"=>"CNY"
             ],
             'payer'=>[
