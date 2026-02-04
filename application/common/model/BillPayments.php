@@ -159,6 +159,51 @@ class BillPayments extends Common
         return $list;
     }
 
+
+    public function prepay($source_str, $payment_code, $user_id = 0, $type = self::TYPE_ORDER,$params = []){
+        //如果支付类型为余额充值，那么资源ID就是用户ID
+        if($type == self::TYPE_RECHARGE) {
+            $source_str = $user_id;
+        }
+
+        //判断支付方式是否开启
+        $paymentsModel = new Payments();
+        $paymentInfo = $paymentsModel->getPayment($payment_code, $paymentsModel::PAYMENT_STATUS_YES);
+        if(!$paymentInfo){
+            return error_code(10050);
+        }
+
+        //如果是公众号支付，并且没有登陆或者没有open_id的话，报错
+        $re = $this->checkOpenId($payment_code,$user_id,$params);
+        if(!$re['status']){
+            return $re;
+        }
+
+        $result = $this->toAdd($source_str, $payment_code, $user_id, $type,$params);
+        if(!$result['status']){
+            return $result;
+        }
+
+
+        $conf = json_decode($paymentInfo['params'],true);
+
+        //去支付
+        $payment = \org\Payment::create($payment_code,$conf);       //'wechatpay'
+        $result1 = $payment->prepay($result['data']);
+
+        //更新，存储微信支付生成的参数
+//        if($result1['status'])
+//        {
+//            $wh[] = ['payment_id', 'eq', $result['data']['payment_id']];
+//            $da['generate_params'] = json_encode($result1['data']);
+//            $this->save($da, $wh);
+//        }
+
+        return $result1;
+
+    }
+
+
     /**
      * 支付，先生成支付单，然后去支付
      * @param $source_str

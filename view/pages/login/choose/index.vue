@@ -223,34 +223,34 @@ export default {
 <style lang="scss">
 .content {
 	/*  #ifdef  H5  */
-	height: calc(100vh - 90upx);
+	height: calc(100vh - 90rpx);
 	/*  #endif  */
 	/*  #ifndef  H5  */
 	height: 100vh;
 	/*  #endif  */
 	background-color: #fff;
 
-	padding: 0upx 100upx;
+	padding: 0rpx 100rpx;
 }
 .login-t {
 	text-align: center;
-	padding: 50upx 0;
+	padding-top:150rpx;
 }
 .login-logo {
-	width: 180upx;
-	height: 180upx;
-	border-radius: 20upx;
+	width: 180rpx;
+	height: 180rpx;
+	border-radius: 20rpx;
 	background-color: #f8f8f8;
 }
 .login-m {
-	margin-bottom: 100upx;
+	margin-bottom: 100rpx;
 }
 .login-item {
-	border-bottom: 2upx solid #d0d0d0;
+	border-bottom: 2rpx solid #d0d0d0;
 	overflow: hidden;
-	padding: 10upx;
+	padding: 10rpx;
 	color: #333;
-	margin-bottom: 30upx;
+	margin-bottom: 30rpx;
 }
 .login-item-input {
 	display: inline-block;
@@ -280,9 +280,9 @@ export default {
 	color: #fff !important;
 }
 .login-other {
-	margin-bottom: 40upx;
+	margin-bottom: 40rpx;
 	.item {
-		padding: 20upx 0;
+		padding: 20rpx 0;
 	}
 }
 .btn-square {
@@ -291,7 +291,7 @@ export default {
 
 .agreement {
 	display: flex;
-	margin: 500rpx 0;
+	margin:220rpx 0;
 	text-align: center;
 	.color-o {
 		margin: 0 10rpx;
@@ -320,7 +320,8 @@ export default {
 	background:#51b352;
 	color:#fff;
 	border-radius:10rpx;
-	margin:0 auto;
+	margin:70rpx auto 0;
 	font-size:36rpx;
+	
 }
 </style>

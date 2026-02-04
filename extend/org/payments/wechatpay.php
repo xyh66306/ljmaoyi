@@ -798,10 +798,52 @@ class wechatpay implements Payment
 
     /**
      * 预支付交易会话标识(prepay_id)
+     * 
      */
-    public static function prepayId($order,$config)
+    public function prepay($order)
     { 
 
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
+
+        $data[] = [
+            'appid' => $this->config['app_id'],//公众号ID
+            'mchid' => $this->config['mch_id'],//商户号
+            'description' => $order['goods_name'],//商品描述
+            'out_trade_no' => $order['order_id'],//商户订单号
+            'time_expire' => date('Y-m-d H:i:s',time()+3600),//订单失效时间
+            'notify_url' => url('b2c/Callback/transactions',['code'=>'wechatpay','order_id'=>$order['order_id']],'html',true),
+            "amount"=>[
+                "total"=>$order['payed'],
+                "currency"=>"CNY"
+            ],
+            'payer'=>[
+                'openid'=>$this->getOpenId($order['user_id'],"JSAPI")
+            ]
+        ];
+        
+        $xml = $this->toXml($data);
+
+        $response = $this->postXmlCurl($xml, $url, false, 6);
+        $re = $this->fromXml($response);       
+        
+        if(!isset($re['return_code'])){
+            $result['msg'] = $re;           //把错误信息都返回到前台吧，方便调试。
+            return $result;
+        }
+        if($re['return_code'] == 'SUCCESS'){
+            if($re['result_code'] == 'SUCCESS'){
+                $result['status'] = true;
+                //支付单传到前台
+                $result['data'] = $data;
+            }else{
+                $result['data'] = $re['err_code'];
+                $result['msg'] = $re['err_code_des'];
+            }
+        }else{
+            $result['data'] = '';
+            $result['msg'] = $re['return_msg'];
+        }
+        return $result;        
+
     }
 }

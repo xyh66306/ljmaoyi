@@ -23,6 +23,7 @@ const methodsToken = [
 	'user.removeship',
 	'user.getusership',
 	'user.pay',
+	'user.prepay',
 	'user.orderevaluate',
 	'user.getuserdefaultship',
 	'user.issign',
@@ -628,6 +629,8 @@ export const paymentInfo = (data, callback) => post('payments.getinfo', data, ca
 
 // 支付接口
 export const pay = (data, callback) => post('user.pay', data, callback);
+//预支付
+export const prepay = (data, callback) => post('user.prepay', data, callback);
 
 // 订单评价接口
 export const orderEvaluate = (data, callback, complete) => post('user.orderevaluate', data, callback, complete);

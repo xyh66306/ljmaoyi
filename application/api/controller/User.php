@@ -815,6 +815,62 @@ class User extends Api
         }
     }
 
+    /**
+     * 预支付
+     * @return array|mixed
+     */
+    public function prepay()
+    {
+        $return_data = [
+            'status' => false,
+            'msg'    => '支付失败',
+            'data'   => []
+        ];
+        if (!input("?param.ids")) {
+            return error_code(13100);
+        }
+        if (!input("?param.payment_code")) {
+            return error_code(10055);
+        }
+        if (!input("?param.payment_type")) {
+            return error_code(10051);
+        }
+
+        $token = input('token', ''); //token值 会员登录后传
+        $user_id = getUserIdByToken($token); //获取user_id
+
+        //支付的时候，有一些特殊的参数需要传递到支付里面，这里就是干这个事情的,key=>value格式的一维数组
+        $data = input('param.');
+        if (!isset($data['params'])) {
+            $params = [];
+        } else {
+            $params = $data['params'];
+        }
+        // 验证订单支付状态
+        $billPaymentsModel = new BillPayments();
+        if(input("param.payment_type") == $billPaymentsModel::TYPE_ORDER){
+            $orderModel = new \app\common\model\Order();
+            $res = $orderModel->checkOrderStatus(input("param.ids"));
+            if(!$res['status']){
+                $res['status'] = true;
+                return $res;
+            }
+        }
+
+        $lock_key = 'user_order_pay_' . $this->userId.'_'.input('param.ids');//防止高并发重复问题
+        if (!Cache::has($lock_key)) {
+            Cache::set($lock_key, '1', 2);
+            $billPaymentsModel = new BillPayments();
+            //生成支付单,并发起支付
+            $payRes = $billPaymentsModel->prepay(input('param.ids'), input('param.payment_code'), $user_id, input('param.payment_type'), $params);
+            Cache::rm($lock_key);
+            return $payRes;
+        }else{
+            return $return_data;
+        }
+    }
+
+
 
     /**
      * 订单评价接口

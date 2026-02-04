@@ -137,6 +137,10 @@ return [
                 'code'     => 'pay',
                 'is_login' => false,
             ],
+            'prepay'              => [
+                'code'     => 'prepay',
+                'is_login' => true,
+            ],
             'orderevaluate'           => [
                 'code'     => 'orderEvaluate',
                 'is_login' => true,
