@@ -805,7 +805,15 @@ class wechatpay implements Payment
 
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
 
-        $data[] = [
+        $openid_re = $this->getOpenId($order['user_id'],"JSAPI");
+        if(!$openid_re['status']){
+            return $openid_re;
+        }  
+        $open_id = $openid_re['data'];    
+        
+        dump($open_id);
+        
+        $data = [
             'appid' => $this->config['app_id'],//公众号ID
             'mchid' => $this->config['mch_id'],//商户号
             'description' => $order['goods_name'],//商品描述
@@ -817,7 +825,7 @@ class wechatpay implements Payment
                 "currency"=>"CNY"
             ],
             'payer'=>[
-                'openid'=>$this->getOpenId($order['user_id'],"JSAPI")
+                'openid'=>$open_id
             ]
         ];
 
