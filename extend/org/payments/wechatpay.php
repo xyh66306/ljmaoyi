@@ -803,6 +803,11 @@ class wechatpay implements Payment
     public function prepay($order)
     { 
 
+        $result   = [
+            'status' => false,
+            'data'   => [],
+            'msg'    => ''
+        ];
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
 
         $openid_re = $this->getOpenId($order['user_id'],"JSAPI");
@@ -835,7 +840,6 @@ class wechatpay implements Payment
             ]
         ];
 
-        dump($data);
 
         $cert_dir = ROOT_PATH . DS . "config" . DS . "payment_cert" . DS . "wechatpay" . DS;
         $config = [
@@ -846,33 +850,17 @@ class wechatpay implements Payment
 
         $http_method = "POST";
         $token  = self::token($url,$http_method,$data,$config);//获取token
-        $result = self::https_request($url,json_encode($data),$token);//发送请求
+        $re = self::https_request($url,json_encode($data),$token);//发送请求
 
-
-
-        // $xml = $this->toXml($data);
-
-        // $response = $this->postXmlCurl($xml, $url, false, 6);
-        // $re = $this->fromXml($response);       
-        
-        // if(!isset($re['return_code'])){
-        //     $result['msg'] = $re;           //把错误信息都返回到前台吧，方便调试。
-        //     return $result;
-        // }
-        // if($re['return_code'] == 'SUCCESS'){
-        //     if($re['result_code'] == 'SUCCESS'){
-        //         $result['status'] = true;
-        //         //支付单传到前台
-        //         $result['data'] = $data;
-        //     }else{
-        //         $result['data'] = $re['err_code'];
-        //         $result['msg'] = $re['err_code_des'];
-        //     }
-        // }else{
-        //     $result['data'] = '';
-        //     $result['msg'] = $re['return_msg'];
-        // }
-        return $result;        
+        if ($re['code'] === 200) {
+            $result_arr = json_decode($re['data'], true);
+            $result['status'] = true;
+            $result['data'] = $result_arr['prepay_id'];
+        } else {
+            $result_arr = json_decode($re['data'], true);
+            $result['msg'] = $result_arr['code'] . '-' . $result_arr['message'];
+        }
+        return $result;     
 
     }
 }
