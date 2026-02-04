@@ -855,7 +855,7 @@ class wechatpay implements Payment
         if ($re['code'] === 200) {
             $result_arr = json_decode($re['data'], true);
             $result['status'] = true;
-            $result['data'] = $result_arr['prepay_id'];
+            $result['data'] = $result_arr;
         } else {
             $result_arr = json_decode($re['data'], true);
             $result['msg'] = $result_arr['code'] . '-' . $result_arr['message'];
