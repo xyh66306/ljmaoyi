@@ -845,7 +845,7 @@ class wechatpay implements Payment
 
         $http_method = "POST";
         $token  = self::token($url,$http_method,$data,$config);//获取token
-        $result = self::https_request($url,$data,$token);//发送请求
+        $result = self::https_request($url,json_encode($data),$token);//发送请求
 
 
 
