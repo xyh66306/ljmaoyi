@@ -820,6 +820,8 @@ class wechatpay implements Payment
                 'openid'=>$this->getOpenId($order['user_id'],"JSAPI")
             ]
         ];
+
+        dump($data);
         
         $xml = $this->toXml($data);
 

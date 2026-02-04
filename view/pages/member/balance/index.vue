@@ -219,7 +219,10 @@ page {
 			// #endif
 			// #ifdef H5
 			padding:30rpx 14rpx 20rpx 14rpx;
-			// #endif			
+			// #endif	
+			// #ifdef MP
+			padding:30rpx 14rpx 20rpx 14rpx;
+			// #endif					
 			margin-top:30rpx;
 			border-top:rgba(255, 255, 255,0.45) 1rpx solid;
 			.txbtn {

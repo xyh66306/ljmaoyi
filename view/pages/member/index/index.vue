@@ -89,17 +89,19 @@
 					</view>
 					<view class="item-name">{{ item.name }}</view>
 				</view>
-				<view class="item" @click="createPoster()">
+				<view class="item" @click="qiyeweixin()">
 					<view class="item-img">
 						<image src='/static/img/pow_13.png'></image>
 					</view>
-					<view class="item-name">分享好友</view>
+					<view class="item-name">群分享</view>
 				</view>				
 				<view class="item">
-					<view class="item-img">
-						<image src='/static/img/pow_07.png'></image>
-					</view>
-					<view class="item-name">群分享</view>
+					<button open-type="contact" class="kefuBtn">
+						<view class="item-img">
+							<image src='/static/img/pow_07.png'></image>
+						</view>
+						<view class="item-name">联系客服</view>
+					</button>
 				</view>				
 			</view>
 		</view>
@@ -226,6 +228,20 @@
 			goLogin() {
 				uni.navigateTo({
 					url: '/pages/login/choose/index'
+				})
+			},
+			qiyeweixin(){
+				wx.openCustomerServiceChat({
+					extInfo:{
+						url:"https://work.weixin.qq.com/join/K7fgjw3ko1LrnyYxNpSraQ/hb_share_mng_index"
+					},
+					corpId:"K7fgjw3ko1LrnyYxNpSraQ",					
+					success: function(res) {
+						console.log(res)
+					},
+					fail: function(res) {
+						console.log(res)
+					}
 				})
 			},
 			getUserInfo(e) {
@@ -740,4 +756,14 @@ image {
 		}
 	}
 }
+
+.kefuBtn {
+	background: none;
+	border:none;
+	&::after {
+		background: none;
+		border:none;
+	}
+}
 </style>
+

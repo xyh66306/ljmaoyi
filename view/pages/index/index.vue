@@ -85,6 +85,7 @@
 				</view>
 			</view>	
 		</view>
+		<view style="height: 40rpx;"></view>
 	</view>
 </template>
 <script>
@@ -311,6 +312,11 @@
 
 <style lang="scss" scoped>
 	
+	page,.content {
+		// background:linear-gradient(180deg, #ffa958, rgba(254, 145, 42, .8), rgba(254, 145, 42, .4), rgba(254, 145, 42, .3));
+		background: #ffa958;
+	}
+	
 	image {
 		width: 100%;
 		height: 100%;
@@ -323,7 +329,7 @@
 	.topbg {		
 		width: 750rpx;
 		height: 2000rpx;
-		background: linear-gradient(to bottom,rgba(254,145,42,1),rgba(254,145,42,0.8),rgba(254,145,42,0.6),rgba(254,145,42,0.3),rgba(255,255,255,1));
+		
 	}
 	
 	.glh {
@@ -445,7 +451,7 @@
 			.item {
 				width: 332rpx;
 				background-color: #fff;
-				border-radius: 5rpx;
+				border-radius:20rpx;
 				overflow: hidden;
 				margin-top: 30rpx;
 				.img {
@@ -491,7 +497,7 @@
 		flex-direction: column;
 		.items {
 			width:690rpx;	
-			border-radius: 10rpx;
+			border-radius:10rpx;
 			overflow: hidden;
 			margin-top:20rpx;
 			background-color: #fff;
