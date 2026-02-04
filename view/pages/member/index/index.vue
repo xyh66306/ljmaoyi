@@ -105,7 +105,10 @@
 				</view>				
 			</view>
 		</view>
-	
+		
+		<!-- #ifdef MP -->
+		<cell bind:startmessage='startmessage' bind:completemessage="completemessage" url='url' plugid="plugid"  />
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -233,9 +236,9 @@
 			qiyeweixin(){
 				wx.openCustomerServiceChat({
 					extInfo:{
-						url:"https://work.weixin.qq.com/join/K7fgjw3ko1LrnyYxNpSraQ/hb_share_mng_index"
+						url:"https://work.weixin.qq.com/kfid/kfc5caa5085215d3867"
 					},
-					corpId:"K7fgjw3ko1LrnyYxNpSraQ",					
+					corpId:"ww97967991c8bb196d",					
 					success: function(res) {
 						console.log(res)
 					},

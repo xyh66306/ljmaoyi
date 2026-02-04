@@ -835,29 +835,42 @@ class wechatpay implements Payment
         ];
 
         dump($data);
-        
-        $xml = $this->toXml($data);
 
-        $response = $this->postXmlCurl($xml, $url, false, 6);
-        $re = $this->fromXml($response);       
+        $cert_dir = ROOT_PATH . DS . "config" . DS . "payment_cert" . DS . "wechatpay" . DS;
+        $config = [
+            'cert_path' => $cert_dir . 'apiclient_cert.pem',
+            'key_path' => $cert_dir . 'apiclient_key.pem',
+            'mch_id' => $this->config['mch_id']
+        ];
+
+        $http_method = "POST";
+        $token  = self::token($url,$http_method,$data,$config);//获取token
+        $result = self::https_request($url,$data,$token);//发送请求
+
+
+
+        // $xml = $this->toXml($data);
+
+        // $response = $this->postXmlCurl($xml, $url, false, 6);
+        // $re = $this->fromXml($response);       
         
-        if(!isset($re['return_code'])){
-            $result['msg'] = $re;           //把错误信息都返回到前台吧，方便调试。
-            return $result;
-        }
-        if($re['return_code'] == 'SUCCESS'){
-            if($re['result_code'] == 'SUCCESS'){
-                $result['status'] = true;
-                //支付单传到前台
-                $result['data'] = $data;
-            }else{
-                $result['data'] = $re['err_code'];
-                $result['msg'] = $re['err_code_des'];
-            }
-        }else{
-            $result['data'] = '';
-            $result['msg'] = $re['return_msg'];
-        }
+        // if(!isset($re['return_code'])){
+        //     $result['msg'] = $re;           //把错误信息都返回到前台吧，方便调试。
+        //     return $result;
+        // }
+        // if($re['return_code'] == 'SUCCESS'){
+        //     if($re['result_code'] == 'SUCCESS'){
+        //         $result['status'] = true;
+        //         //支付单传到前台
+        //         $result['data'] = $data;
+        //     }else{
+        //         $result['data'] = $re['err_code'];
+        //         $result['msg'] = $re['err_code_des'];
+        //     }
+        // }else{
+        //     $result['data'] = '';
+        //     $result['msg'] = $re['return_msg'];
+        // }
         return $result;        
 
     }
