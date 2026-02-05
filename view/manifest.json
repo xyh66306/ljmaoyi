@@ -5,6 +5,7 @@
     "versionName" : "1.1.0",
     "versionCode" : 110,
     "transformPx" : false,
+    "sassImplementationName" : "node-sass",
     "uniStatistics" : {
         "enable" : false //全局关闭统计 
     },

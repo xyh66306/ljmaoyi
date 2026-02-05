@@ -144,11 +144,11 @@ export default {
 			switch (code) {
 				case 'wechatpay':
 					//预支付
-					this.$api.prepay(data,res=>{
-						console.log(res)
-					});
+					// this.$api.prepay(data,res=>{
+					// 	console.log(res)
+					// });
 					
-					return;
+					// return;
 					this.$api.pay(data, (res) => {
 						if (res.status) {
 							uni.requestPayment({

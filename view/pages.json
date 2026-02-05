@@ -20,16 +20,6 @@
 			}
 		},
 		{
-			"path": "pages/index/sign",
-			"style": {
-				"navigationBarTitleText": "签到",
-				// #ifdef H5
-				"titleNView": false,
-				// #endif
-				"enablePullDownRefresh": false
-			}
-		},
-		{
 			"path": "pages/index/search",
 			"style": {
 				"navigationBarTitleText": "搜索"
@@ -72,12 +62,12 @@
 			}			
 		},
 
-		{
-			"path": "pages/member/pagesign/index/index",
-			"style": {
-				"navigationBarTitleText": "签到"
-			}
-		},
+		// {
+		// 	"path": "pages/member/pagesign/index/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "签到"
+		// 	}
+		// },
 		{
 			"path": "pages/member/coupon/index",
 			"style": {
@@ -90,12 +80,12 @@
 				"navigationBarTitleText": "我的余额"
 			}
 		},
-		{
-			"path": "pages/member/exp/index",
-			"style": {
-				"navigationBarTitleText": "元宝"
-			}
-		},
+		// {
+		// 	"path": "pages/member/exp/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "元宝"
+		// 	}
+		// },
 		{
 			"path": "pages/member/exp/gift",
 			"style": {

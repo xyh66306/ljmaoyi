@@ -63,7 +63,7 @@
 					<view class="name">VIP</view>
 					<view class="price">
 						<text class="yen">&yen;</text>
-						<text class="nums">198</text>
+						<text class="nums">495</text>
 					</view>
 				</view>
 				<view class="items" :class="index==1?'on':''" @click="tabClick(1)">
@@ -147,7 +147,7 @@ export default {
 				{
 					image: apiBaseUrl+'app/images/qy_02.png',
 					name: 'VIP权益',
-					desc: '礼包1'
+					desc: '礼包*10'
 				},
 				{
 					image: apiBaseUrl+'app/images/qy_04.png',
@@ -179,12 +179,12 @@ export default {
 				{
 					image: apiBaseUrl+'app/images/qy_02.png',
 					name: '合伙人权益',
-					desc: '礼包2*4'
+					desc: '礼包*40'
 				},
 				{
 					image: apiBaseUrl+'app/images/qy_04.png',
 					name: '推荐复购',
-					desc: '12%收益'
+					desc: '10%收益'
 				}				
 			],						
 			index:0,

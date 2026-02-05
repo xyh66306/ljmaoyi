@@ -24,10 +24,10 @@
 					</view>
 				</template>
 				<template v-else>
-					<view class="login-img" @click="goToPage('/pages/member/setting/user_info/index')">
+					<view class="login-img" @click="editModal=true">
 						<image :src="userInfo.avatar" mode=""></image>
 					</view>
-					<view class="login-info" @click="goToPage('/pages/member/setting/user_info/index')">
+					<view class="login-info" @click="editModal=true">
 						<view class="nickname">{{ userInfo.nickname }}</view>
 						<view class="grade">
 							{{ userInfo.grade_name }}
@@ -107,7 +107,7 @@
 		</view>
 		
 		<!-- #ifdef MP -->
-		<cell bind:startmessage='startmessage' bind:completemessage="completemessage" url='url' plugid="plugid"  />
+		<editUserModal :isShow="editModal" @closeEdit="closeEdit" @editSuccess="editSuccess"></editUserModal>
 		<!-- #endif -->
 	</view>
 </template>
@@ -126,10 +126,19 @@
 		checkLogin,common
 	} from '@/config/mixins.js'
 	import { h5Url } from '@/config/config.js'
+	// #ifdef MP
+	import editUserModal from '@/components/editUserModal/index.vue';
+	// #endif		
 	export default {
 		mixins: [checkLogin,common],
+		components: {
+			// #ifdef MP
+			editUserModal
+			// #endif	
+		},		
 		data() {
 			return {
+				editModal:false,
 				open_id: '',
 				hasLogin: false,
 				userInfo: {}, // 用户信息
@@ -225,6 +234,18 @@
 			this.initData()
 		},
 		methods: {
+			editSuccess(data) {
+				this.editModal = false;
+				// this.userInfo = data;
+				//在这里可以把获取到的头像昵称信息通过接口保存到数据库
+				this.$api.editInfo(data,res=>{
+					this.closeEdit();
+					this.initData()
+				})
+			},	
+			closeEdit() {
+				this.editModal = false;
+			},						
 			goToPage(url){
 				this.$common.navigateTo(url)
 			},

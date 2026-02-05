@@ -133,11 +133,20 @@ class UserFenyong extends Common
 
                if($userInfo['pid'] > 0 ){
                     $rate = 0;
-                    if($fatherInfo['grade'] ==2){
-                        $rate = 0.08;
-                    }elseif($fatherInfo['grade'] ==3){
-                        $rate = 0.12;
+                    if($v['payed']<1000){
+                        if($fatherInfo['grade'] ==2){
+                            $rate = 0.15;
+                        }elseif($fatherInfo['grade'] ==3){
+                            $rate = 0.08;
+                        }
+                    }else{
+                        if($fatherInfo['grade'] ==2){
+                            $rate = 0.15;
+                        }elseif($fatherInfo['grade'] ==3){
+                            $rate = 0.15;
+                        }  
                     }
+
                     $profit = bcmul($v['payed'], $rate, 2);
                     $this->addDate(1,$fatherInfo['id'],$fatherInfo['grade'],$rate,$order_id,$v['goods_id'],$v['product_id'],$v['payed'],$v['nums'],$profit,$userInfo['id'],$userInfo['grade']);
                 }
@@ -259,7 +268,7 @@ class UserFenyong extends Common
                 $dlqysy = Db::name("daili_tongji")->where(['area_id'=>$district_id,'nianyue'=>$nianyue])->value("money");   //区级区域销售总额
                 if($dlqysy>0){
                     $localCount = $userModel->where("area_id",$district_id)->count("id");   //区级代理数量
-                    $fenyong = bcmul($dlqysy,0.3/100/$localCount,2);
+                    $fenyong = bcmul($dlqysy,1/100/$localCount,2);
                     if($fenyong>0.1){
                         $balanceModel->change($district_id,$balanceModel::TYPE_QUYUE,$fenyong);
                     }
@@ -273,7 +282,7 @@ class UserFenyong extends Common
                 $dlqysy = Db::name("daili_tongji")->where(['area_id'=>$city_id,'nianyue'=>$nianyue])->value("money");   //区级区域销售总额
                 if($dlqysy>0){
                     $localCount = $userModel->where("area_id",$city_id)->count("id");   //区级代理数量
-                    $fenyong = bcmul($dlqysy,0.3/100/$localCount,2);
+                    $fenyong = bcmul($dlqysy,0.6/100/$localCount,2);
                     if($fenyong>0.1){
                         $balanceModel->change($city_id,$balanceModel::TYPE_QUYUE,$fenyong);
                     }
@@ -287,7 +296,7 @@ class UserFenyong extends Common
                 $dlqysy = Db::name("daili_tongji")->where(['area_id'=>$province_id,'nianyue'=>$nianyue])->value("money");   //区级区域销售总额
                 if($dlqysy>0){
                     $localCount = $userModel->where("area_id",$province_id)->count("id");   //区级代理数量
-                    $fenyong = bcmul($dlqysy,0.3/100/$localCount,2);
+                    $fenyong = bcmul($dlqysy,0.4/100/$localCount,2);
                     if($fenyong>0.1){
                         $balanceModel->change($province_id,$balanceModel::TYPE_QUYUE,$fenyong);
                     }
