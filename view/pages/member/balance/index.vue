@@ -7,7 +7,7 @@
 				</view>
 				<view class="wallteArea_box">
 					<view class="top">
-						<view class="wallte_tit">钱包酒宝（元）</view>
+						<view class="wallte_tit">钱包余额（元）</view>
 						<view class="money_nums">{{userInfo.balance}}</view>
 					</view>
 					<view class="wallte_info">

@@ -50,8 +50,8 @@
 				</view>
 				<view class='cell-item'>
 					<view class='cell-item-bd'>
-						<view class='cell-hd-title' style="color: #666;" v-show="!isError">可用酒宝 {{ user.balance || ''}} 元</view>
-						<view class='cell-hd-title' style="color: #f00;" v-show="isError">提现金额超过可用酒宝</view>
+						<view class='cell-hd-title' style="color: #666;" v-show="!isError">可用余额 {{ user.balance || ''}} 元</view>
+						<view class='cell-hd-title' style="color: #f00;" v-show="isError">提现金额超过可用余额</view>
 					</view>
 				</view>
 			</view>

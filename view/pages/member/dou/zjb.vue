@@ -15,10 +15,10 @@
 			<view class='cell-group'>
 				<view class='cell-item user-head'>
 					<view class='cell-item-hd'>
-						<view class='cell-hd-title'>转酒宝</view>
+						<view class='cell-hd-title'>转余额</view>
 					</view>
 					<view class='cell-item-bd'>
-						<input class='cell-bd-input' type="number" placeholder='请填写转酒宝数量' v-model="dou"></input>
+						<input class='cell-bd-input' type="number" placeholder='请填写转余额数量' v-model="dou"></input>
 					</view>
 				</view>
 			</view>	
