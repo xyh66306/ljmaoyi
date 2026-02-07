@@ -41,7 +41,7 @@ class Advertisement extends Common
         'type.require'              =>  '请选择要添加的广告类型',
         'img.require'               =>  '请选择要上传的广告图片',
         'img.alphaNum'              =>  '广告图片非法',
-        'url.url'                   =>  'url链接不是有效的地址',
+        // 'url.url'                   =>  'url链接不是有效的地址',
         'url.requireIf'             =>  '请输入广告URL链接',
         'goods_id.requireIf'        =>  '请选择广告商品',
         'article_id.requireIf'      =>  '请选择广告文章',
