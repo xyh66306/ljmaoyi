@@ -48,7 +48,7 @@ class ShopIndex extends Api
         }
 
         $noticeModel = new NoticeModel();
-        $notice = $noticeModel->where('type',1)->find();
+        $notice = $noticeModel->where('type',1)->cache(3600)->find();
 
         $result['data']['notice'] = $notice;
         $result['data']['reomlist'] = $reomlist;

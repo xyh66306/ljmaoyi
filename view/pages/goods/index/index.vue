@@ -282,14 +282,13 @@
 				</view>
 				
 				<block v-if="goodsInfo.goods_cat_id==1">
-					<button class='btn btn-square btn-b' v-if="userInfo.grade>=2" @click="toshow(3)" hover-class="btn-hover2" style="width: 58%;">立即购买</button>
-					<button class='btn btn-square btn-b btn-hover2' v-else  style="width: 58%;">VIP专属</button>
+					<button class='btn btn-square btn-b' @click="toshow(3)" hover-class="btn-hover2" style="width: 58%;">立即购买</button>
 				</block>
 				<block v-else>
 					<button class='btn btn-square btn-g' @click="toshow(1)" hover-class="btn-hover2" style="width: 30%;">加入购物车</button>
 					<button class='btn btn-square btn-b' @click="toshow(2)" hover-class="btn-hover2" style="width: 28%;">立即购买</button>
 				</block>
-				</block>
+			</block>
 			<block v-else>
 				<button class='btn btn-square btn-b' @click="toshow(2)" hover-class="btn-hover2" style="width:100%;">立即购买</button>
 			</block>			
