@@ -353,6 +353,18 @@ class Setting extends Common
             'name'=>'开启积分兑换',
             'value'=>'1'
         ],
+        'district_agent'=>[
+            'name'=>'区级代理',
+            'value'=>'1'
+        ],
+        'city_agent'=>[
+            'name'=>'市级代理',
+            'value'=>'0.6'
+        ],
+        'province_agent'=>[
+            'name'=>'省级代理',
+            'value'=>'0.4'
+        ],                        
     ];
 
 

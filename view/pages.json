@@ -56,18 +56,8 @@
 				"titleNView": false,
 				// #endif
 				"navigationBarTitleText": "个人中心"
-			},
-			"usingComponents": {
-				"cell": "plugin://materialPlugin/cell"
-			}			
+			}		
 		},
-
-		// {
-		// 	"path": "pages/member/pagesign/index/index",
-		// 	"style": {
-		// 		"navigationBarTitleText": "签到"
-		// 	}
-		// },
 		{
 			"path": "pages/member/coupon/index",
 			"style": {
@@ -486,11 +476,5 @@
 			"path": "", //启动页面，必选
 			"query": "" //启动参数，在页面的onLoad函数里面得到
 		}]
-	},
-	"plugins": {
-		"materialPlugin": {
-			"version": "1.0.12",
-			"provider": "wx4d2deeab3aed6e5a"
-		}
-	} 	
+	}
 }
