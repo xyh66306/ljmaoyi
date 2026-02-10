@@ -34,7 +34,7 @@ class ShopIndex extends Api
 
         $GoodsModel = new GoodsModel();
 
-        $hotlist = $GoodsModel->field("id,name,price,mktprice,thumb")->where("marketable",1)->where("goods_cat_id",1)->cache(3600)->select()->toArray();
+        $hotlist = $GoodsModel->field("id,name,price,mktprice,thumb")->where("marketable",1)->where("goods_cat_id",4)->cache(3600)->select()->toArray();
         $reomlist = $GoodsModel->field("id,name,price,mktprice,image_id")->where("marketable",1)->where("is_recommend",1)->cache(3600)->select()->toArray();
 
         foreach ($hotlist as &$item) {
