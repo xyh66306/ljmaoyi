@@ -158,9 +158,9 @@ class UserFenyong extends Common
             }
 
             if($v['goods_cat_id'] == 4){
-                if($userInfo['grade'] == 1 || $v['price'] ==198){
+                if($v['price'] ==495){
                     $userGradeLog->authGrade($userInfo['id'],2);
-                }elseif($userInfo['grade'] == 2 || $v['price'] ==1980){
+                }elseif($v['price'] ==1980){
                     $userGradeLog->authGrade($userInfo['id'],3);
                 }
             }
