@@ -48,7 +48,7 @@
 		}
 	}
 </script>
-<style>
+<style lang="scss">
 
 .goods-specs,.goods-number{
 	padding: 26upx;
@@ -75,8 +75,8 @@
 	margin-top: 10upx;
 }
 .selected{
-	border: 2upx solid #333;
-	background-color: #333;
+	border: 2upx solid $theme-color;
+	background-color: $theme-color;
 	color: #fff;
 }
 .not-selected{

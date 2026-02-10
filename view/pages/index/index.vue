@@ -76,10 +76,10 @@
 							<!-- <view class="desc" v-if="item.brief">
 								{{item.brief}}…
 							</view> -->
-							<view class="price flex">
+<!-- 							<view class="price flex">
 								<view class="unit">&yen;</view>
 								<view class="nums">{{item.price}}</view>
-							</view>
+							</view> -->
 						</view>
 					</view>															
 				</view>

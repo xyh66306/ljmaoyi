@@ -109,8 +109,7 @@
 					</view>
 					<view class='cell-item-bd'>
 						<text class='cell-bd-text color-6 fsz24'>
-							快递(48小时内发货) · {{goodsInfo.fee}}
-							<block v-if="goodsInfo.brand && goodsInfo.brand.minbuy>0">({{goodsInfo.brand.minbuy}}份免运费)</block>
+							快递(48小时内发货)
 						</text>
 					</view>
 				</view>
@@ -285,8 +284,9 @@
 					<button class='btn btn-square btn-b' @click="toshow(3)" hover-class="btn-hover2" style="width: 58%;">立即购买</button>
 				</block>
 				<block v-else>
-					<button class='btn btn-square btn-g' @click="toshow(1)" hover-class="btn-hover2" style="width: 30%;">加入购物车</button>
-					<button class='btn btn-square btn-b' @click="toshow(2)" hover-class="btn-hover2" style="width: 28%;">立即购买</button>
+					<button class='btn btn-square btn-b' @click="toshow(3)" hover-class="btn-hover2" style="width: 58%;">暂无权限</button>
+					<!-- <button class='btn btn-square btn-g' @click="toshow(1)" hover-class="btn-hover2" style="width: 30%;">加入购物车</button>
+					<button class='btn btn-square btn-b' @click="toshow(2)" hover-class="btn-hover2" style="width: 28%;">立即购买</button> -->
 				</block>
 			</block>
 			<block v-else>
