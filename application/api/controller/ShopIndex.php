@@ -68,7 +68,8 @@ class ShopIndex extends Api
         $noticeModel = new NoticeModel();
         $notice = $noticeModel->where('type',1)->select();
 
-        $result['data'] = $notice;
+        $result['data']['count'] = $noticeModel->where('type',1)->count();
+        $result['data']['list'] = $notice;
         return $result;        
 
     }
