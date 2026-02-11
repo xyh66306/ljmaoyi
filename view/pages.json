@@ -65,6 +65,12 @@
 			}
 		},
 		{
+			"path": "pages/member/notice/index",
+			"style": {
+				"navigationBarTitleText": "公告栏"
+			}
+		},		
+		{
 			"path": "pages/member/balance/index",
 			"style": {
 				"navigationBarTitleText": "我的余额"

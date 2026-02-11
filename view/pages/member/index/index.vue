@@ -89,12 +89,12 @@
 					</view>
 					<view class="item-name">{{ item.name }}</view>
 				</view>
-				<view class="item" @click="qiyeweixin()">
+<!-- 				<view class="item" @click="qiyeweixin()">
 					<view class="item-img">
 						<image src='/static/img/pow_13.png'></image>
 					</view>
-					<view class="item-name">群分享</view>
-				</view>				
+					<view class="item-name">公告栏</view>
+				</view>	 -->			
 				<view class="item">
 					<button open-type="contact" class="kefuBtn">
 						<view class="item-img">
@@ -222,7 +222,14 @@
 						router: '/pages/member/coupon/index',
 						unshowItem: false,
 						nums: 0
-					},				
+					},		
+					notice: {
+						name: '公告栏',
+						icon: '/static/img/pow_08.png',
+						router: '/pages/member/notice/index',
+						unshowItem: false,
+						nums: 0
+					},								
 				},
 				list: 2,
 				suTipStatus: false,

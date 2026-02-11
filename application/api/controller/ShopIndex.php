@@ -57,5 +57,21 @@ class ShopIndex extends Api
  
     }
 
+    public function notice()
+    {
+
+        $result = [
+            'status' => true,
+            'msg' => '获取成功',
+            'data' => []
+        ];        
+        $noticeModel = new NoticeModel();
+        $notice = $noticeModel->where('type',1)->select();
+
+        $result['data'] = $notice;
+        return $result;        
+
+    }
+
 
 }

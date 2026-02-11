@@ -867,6 +867,10 @@ return [
                 'code'     => 'index',
                 'is_login' => false
             ],
+            'notice'       => [
+                'code'     => 'notice',
+                'is_login' => false
+            ],            
         ]
     ],        
 ];

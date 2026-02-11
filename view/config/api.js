@@ -967,6 +967,7 @@ export const pointDetail = (data, callback) => post('pointmall.detial', data, ca
 
 //首页
 export const getmyindex = (data, callback) => post('shopindex.index', data, callback);
+export const noticeList = (data, callback) => post('shopindex.notice', data, callback);
 
 //余额
 export const getExpLst = (data, callback) => post('exp.getlst', data, callback);
