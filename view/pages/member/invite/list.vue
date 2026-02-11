@@ -27,7 +27,7 @@
 						</view>
 						<view class="team">
 							<view class="">推荐：<text>{{item.count}}</text>人</view>
-							<!-- <view>消费：<text>{{item.team_value}}</text>元</view> -->
+							<view>团队消费：<text>{{item.team_value}}</text>元</view>
 						</view>
 					</view>
 				</view>

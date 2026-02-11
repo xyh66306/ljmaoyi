@@ -1458,7 +1458,7 @@ class User extends Common
         $userBalance = $this->field("id,team_value,balance,exp")->where(['id' => $user_id])->find();
 
         $return_data['data'][0] = floatval($balance);
-        $return_data['data'][1] = $userBalance['balance'];
+        $return_data['data'][1] = $userBalance['exp'];
         $return_data['data'][2] = floatval($userBalance['team_value']);
         $return_data['status'] = true;
 

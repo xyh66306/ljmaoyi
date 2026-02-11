@@ -189,4 +189,11 @@ class Crontab extends Base
         return json_encode(['status' => true, 'msg' => $nianyue.'分红成功']);
     }
 
+
+    public function delExp(){
+        $userModel = new User();
+        $userModel->update(['exp'=>0]);
+        return json_encode(['status' => true, 'msg' => '取消成功']);
+    }
+
 }
