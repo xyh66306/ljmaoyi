@@ -68,6 +68,11 @@ class ShopIndex extends Api
         $noticeModel = new NoticeModel();
         $notice = $noticeModel->where('type',1)->select();
 
+        foreach ($notice as &$item) {
+            $item['cover'] = _sImage();
+            $item['ctime'] = date('Y-m-d',$item['ctime']);
+        }
+
         $result['data']['count'] = $noticeModel->where('type',1)->count();
         $result['data']['list'] = $notice;
         return $result;        
