@@ -4,8 +4,8 @@
 			<view class="bg"></view>
 			<view class="mymoney flex">
 				<view class="allmoney commoney flex">
-					<view class="num">{{ mycendata[1] || 0 }}</view>
-					<view class="txt">余额</view>
+					<view class="num">{{ mycendata[2] || 0 }}</view>
+					<view class="txt">团队业绩</view>
 				</view>
 				<view class="currmoney commoney flex">
 					<view class="num">{{ mycendata[0] || 0}}</view>

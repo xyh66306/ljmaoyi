@@ -149,6 +149,22 @@ class UserFenyong extends Common
 
                     $profit = bcmul($v['payed'], $rate, 2);
                     $this->addDate(1,$fatherInfo['id'],$fatherInfo['grade'],$rate,$order_id,$v['goods_id'],$v['product_id'],$v['payed'],$v['nums'],$profit,$userInfo['id'],$userInfo['grade']);
+                
+                    //新增父亲业绩
+                    $fa_team_val = bcadd($fatherInfo['team_value'],$v['payed'],2);
+                    Db::name("user")->where(['id'=>$fatherInfo['id']])->update(['team_value'=>$fa_team_val]);
+
+                    //新增爷爷业绩
+                    if($fatherInfo['pid']>0){
+                        $yeyeInfo = Db::name('user')->where(['id'=>$fatherInfo['pid']])->find();
+                        if($yeyeInfo && $yeyeInfo['grade']==3){
+                            $yeye_team_val = bcadd($yeyeInfo['team_value'],$v['payed']*0.03,2);
+                            Db::name("user")->where(['id'=>$fatherInfo['id']])->update(['team_value'=>$yeye_team_val]);      
+                        }
+                    }
+              
+
+                
                 }
 
                 //添加一个6返1标识       
