@@ -257,9 +257,10 @@ class UserFenyong extends Common
         $hhr_ids = [];
         foreach($dailiLst as $key=>$val){ 
              //是否符合条件
-             $vipCount = Db::name('user')->whereTime('viptime', 'month')->where(['pid'=>$val['id'],'grade'=>2])->count();
-             $hhrCount = Db::name('user')->whereTime('viptime', 'month')->where(['pid'=>$val['id'],'grade'=>3])->count();
-             if($vipCount>=10 && $hhrCount>=5){
+             $vipCount = Db::name('user')->where(['pid'=>$val['id'],'grade'=>2])->count();      //直推 10 个 VIP
+             $hhrCount = Db::name('user')->where(['pid'=>$val['id'],'grade'=>3])->count();      //直推 5个合伙人
+             $daxiaoqu = Db::name('user')->where("pid",$val['id'])->where("team_value",">=",250000)->count();   // 3）至少两个直推的业绩须达到25万
+             if($vipCount>=10 && $hhrCount>=5 && $daxiaoqu>=2 && $val['exp']>100000){       //5)每月新增业绩10w元
                 $hhr_ids[] = $val['id'];
              }
         }
