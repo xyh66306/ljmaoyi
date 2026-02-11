@@ -192,7 +192,7 @@ class Crontab extends Base
 
     public function delExp(){
         $userModel = new User();
-        $userModel->update(['exp'=>0]);
+        $userModel->update(['exp'=>0],['status'=>1]);
         return json_encode(['status' => true, 'msg' => '取消成功']);
     }
 
