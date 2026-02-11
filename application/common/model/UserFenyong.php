@@ -152,14 +152,16 @@ class UserFenyong extends Common
                 
                     //新增父亲业绩
                     $fa_team_val = bcadd($fatherInfo['team_value'],$v['payed'],2);
-                    Db::name("user")->where(['id'=>$fatherInfo['id']])->update(['team_value'=>$fa_team_val]);
+                    $fa_exp = bcadd($fatherInfo['exp'],$v['payed'],2);
+                    Db::name("user")->where(['id'=>$fatherInfo['id']])->update(['team_value'=>$fa_team_val,'exp'=>$fa_exp]);
 
                     //新增爷爷业绩
                     if($fatherInfo['pid']>0){
                         $yeyeInfo = Db::name('user')->where(['id'=>$fatherInfo['pid']])->find();
                         if($yeyeInfo && $yeyeInfo['grade']==3){
                             $yeye_team_val = bcadd($yeyeInfo['team_value'],$v['payed']*0.03,2);
-                            Db::name("user")->where(['id'=>$fatherInfo['id']])->update(['team_value'=>$yeye_team_val]);      
+                            $yeye_exp = bcadd($yeyeInfo['exp'],$v['payed']*0.03,2);
+                            Db::name("user")->where(['id'=>$yeyeInfo['id']])->update(['team_value'=>$yeye_team_val,'exp'=>$yeye_exp]);      
                         }
                     }
               
